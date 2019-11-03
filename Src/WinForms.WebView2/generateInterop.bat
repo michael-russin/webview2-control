@@ -1,0 +1,1 @@
+"tlbimp.exe" "..\packages\Microsoft.Web.WebView2.0.8.270\WebView2.tlb" /asmversion:1.0.0.0 /out:"WebView2.Interop.dll" 
