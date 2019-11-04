@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Russinsoft.WebView2.Interop;
 
-namespace WebView2Sharp.Events
+namespace Russinsoft.WinForms
 {
     public class ScriptDialogOpeningEventArgs : EventArgs, IWebView2ScriptDialogOpeningEventArgs
     {
@@ -47,9 +43,9 @@ namespace WebView2Sharp.Events
             set => _args.ResultText = value;
         }
 
-        public Deferral GetDeferral()
+        public WebView2Deferral GetDeferral()
         {
-            return new Deferral(_args.GetDeferral());
+            return new WebView2Deferral(_args.GetDeferral());
         }
 
         IWebView2Deferral IWebView2ScriptDialogOpeningEventArgs.GetDeferral()

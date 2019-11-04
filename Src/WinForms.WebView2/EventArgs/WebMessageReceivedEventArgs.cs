@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using Russinsoft.WebView2.Interop;
 
-namespace WebView2Sharp.Events
+namespace Russinsoft.WinForms
 {
     public class WebMessageReceivedEventArgs : EventArgs, IWebView2WebMessageReceivedEventArgs
     {

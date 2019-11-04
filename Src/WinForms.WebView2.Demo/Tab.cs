@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WebView2Sharp.Events;
+﻿using Russinsoft.WinForms;
+using System;
 
-namespace WebView2Sharp.Demo.WinForms
+namespace WinForms.WebView2.Demo
 {
     public class Tab : WebView2Control
     {
-        public static Tab CreateNewTab(WebView2Browser parentBrowser, WebViewEnvironment environment, int id, bool shouldBeActive)
+        public static Tab CreateNewTab(WebView2Browser parentBrowser, WebView2Environment environment, int id, bool shouldBeActive)
         {
             Tab tab = new Tab(parentBrowser, environment, id, shouldBeActive);
             return tab;
         }
 
-        private Tab(WebView2Browser parentBrowser, WebViewEnvironment environment, int tabId, bool shouldBeActive) : 
+        private Tab(WebView2Browser parentBrowser, WebView2Environment environment, int tabId, bool shouldBeActive) : 
             base(environment)
         {
             _tabId = tabId;

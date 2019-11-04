@@ -1,4 +1,6 @@
-﻿namespace WebView2Sharp.Demo.WinForms
+﻿using Russinsoft.WinForms;
+
+namespace WinForms.WebView2.Demo
 {
     partial class WebView2Browser
     {
@@ -28,9 +30,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WebView2Browser));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.controlsWebView2 = new WebView2Sharp.WebView2Control();
-            this.webView2Control2 = new WebView2Sharp.WebView2Control();
+            this.controlsWebView2 = new Russinsoft.WinForms.WebView2Control();
+            this.webView2Control2 = new Russinsoft.WinForms.WebView2Control();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -63,11 +66,11 @@
             this.controlsWebView2.TabIndex = 0;
             this.controlsWebView2.Text = "webView2Control1";
             this.controlsWebView2.ZoomFactor = 1D;
-            this.controlsWebView2.BeforeEnvironmentCreated += new System.EventHandler<WebView2Sharp.Events.BeforeEnvironmentCreatedEventArgs>(this.controlsWebView2_BeforeEnvironmentCreated);
-            this.controlsWebView2.EnvironmentCreated += new System.EventHandler<WebView2Sharp.EnvironmentCreatedEventArgs>(this.controlsWebView2_EnvironmentCreated);
+            this.controlsWebView2.BeforeEnvironmentCreated += new System.EventHandler<Russinsoft.WinForms.BeforeEnvironmentCreatedEventArgs>(this.controlsWebView2_BeforeEnvironmentCreated);
+            this.controlsWebView2.EnvironmentCreated += new System.EventHandler<Russinsoft.WinForms.EnvironmentCreatedEventArgs>(this.controlsWebView2_EnvironmentCreated);
             this.controlsWebView2.BrowserCreated += new System.EventHandler<System.EventArgs>(this.controlsWebView2_BrowserCreated);
-            this.controlsWebView2.ZoomFactorChanged += new System.EventHandler<WebView2Sharp.Events.ZoomFactorCompletedEventArgs>(this.controlsWebView2_ZoomFactorChanged);
-            this.controlsWebView2.WebMessageRecieved += new System.EventHandler<WebView2Sharp.Events.WebMessageReceivedEventArgs>(this.controlsWebView2_WebMessageRecieved);
+            this.controlsWebView2.ZoomFactorChanged += new System.EventHandler<Russinsoft.WinForms.ZoomFactorCompletedEventArgs>(this.controlsWebView2_ZoomFactorChanged);
+            this.controlsWebView2.WebMessageRecieved += new System.EventHandler<Russinsoft.WinForms.WebMessageReceivedEventArgs>(this.controlsWebView2_WebMessageRecieved);
             // 
             // webView2Control2
             // 
@@ -83,8 +86,8 @@
             this.webView2Control2.Text = "webView2Control2";
             this.webView2Control2.Visible = false;
             this.webView2Control2.ZoomFactor = 1D;
-            this.webView2Control2.BeforeEnvironmentCreated += new System.EventHandler<WebView2Sharp.Events.BeforeEnvironmentCreatedEventArgs>(this.webView2Control2_BeforeEnvironmentCreated);
-            this.webView2Control2.EnvironmentCreated += new System.EventHandler<WebView2Sharp.EnvironmentCreatedEventArgs>(this.webView2Control2_EnvironmentCreated);
+            this.webView2Control2.BeforeEnvironmentCreated += new System.EventHandler<Russinsoft.WinForms.BeforeEnvironmentCreatedEventArgs>(this.webView2Control2_BeforeEnvironmentCreated);
+            this.webView2Control2.EnvironmentCreated += new System.EventHandler<Russinsoft.WinForms.EnvironmentCreatedEventArgs>(this.webView2Control2_EnvironmentCreated);
             // 
             // WebView2Browser
             // 
@@ -92,9 +95,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1067, 554);
             this.Controls.Add(this.tableLayoutPanel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "WebView2Browser";
-            this.Text = "WebView2Browser";
+            this.Text = "WebView2 Windows Forms Browser";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 

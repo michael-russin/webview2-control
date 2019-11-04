@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Russinsoft.WebView2.Interop;
 
-namespace WebView2Sharp.Events
+namespace Russinsoft.WinForms.Handlers
 {
-    public class WebView2ZoomFactorChangedEventHandler : IWebView2ZoomFactorChangedEventHandler
+    public class ZoomFactorChangedEventHandler : IWebView2ZoomFactorChangedEventHandler
     {
         Action<ZoomFactorCompletedEventArgs> _callback;
 
-        public WebView2ZoomFactorChangedEventHandler(Action<ZoomFactorCompletedEventArgs> callback)
+        public ZoomFactorChangedEventHandler(Action<ZoomFactorCompletedEventArgs> callback)
         {
             _callback = callback;
         }

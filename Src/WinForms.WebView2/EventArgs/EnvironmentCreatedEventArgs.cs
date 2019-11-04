@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Russinsoft.WebView2.Interop;
 
-namespace WebView2Sharp
+namespace Russinsoft.WinForms
 {
     public class EnvironmentCreatedEventArgs : EventArgs
     {
         internal EnvironmentCreatedEventArgs(int result, IWebView2Environment webViewEnvironment)
         {
             Result = result;
-            WebViewEnvironment = new WebViewEnvironment(webViewEnvironment);
+            WebViewEnvironment = new WebView2Environment(webViewEnvironment);
         }
 
         public int Result
@@ -20,7 +16,7 @@ namespace WebView2Sharp
             get; private set;
         }
 
-        public WebViewEnvironment WebViewEnvironment
+        public WebView2Environment WebViewEnvironment
         {
             get; private set;
         }

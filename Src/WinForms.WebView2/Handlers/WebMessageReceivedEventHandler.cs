@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Russinsoft.WebView2.Interop;
 
-namespace WebView2Sharp.Events
+namespace Russinsoft.WinForms.Handlers
 {
-    public class WebView2WebMessageReceivedEventHandler : IWebView2WebMessageReceivedEventHandler
+    public class WebMessageReceivedEventHandler : IWebView2WebMessageReceivedEventHandler
     {
         Action<WebMessageReceivedEventArgs> _callback;
 
-        public WebView2WebMessageReceivedEventHandler(Action<WebMessageReceivedEventArgs> callback)
+        public WebMessageReceivedEventHandler(Action<WebMessageReceivedEventArgs> callback)
         {
             _callback = callback;
         }

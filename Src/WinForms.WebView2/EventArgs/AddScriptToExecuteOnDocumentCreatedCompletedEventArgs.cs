@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace WebView2Sharp.Events
+namespace Russinsoft.WinForms
 {
-    public class AddScriptToExecuteOnDocumentCreatedCompletedEventArgs
+    public class AddScriptToExecuteOnDocumentCreatedCompletedEventArgs : EventArgs
     {
         internal AddScriptToExecuteOnDocumentCreatedCompletedEventArgs(int errorCode, string id)
         {

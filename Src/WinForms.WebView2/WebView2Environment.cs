@@ -1,20 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using Russinsoft.WebView2.Interop;
-using WebView2Sharp.Events;
-using WebView2Sharp.Handlers;
+using Russinsoft.WinForms.Handlers;
 
-namespace WebView2Sharp
+namespace Russinsoft.WinForms
 {
-    public class WebViewEnvironment 
+    public class WebView2Environment 
     {
         private IWebView2Environment _environment;
 
-        internal WebViewEnvironment(IWebView2Environment environment)
+        internal WebView2Environment(IWebView2Environment environment)
         {
             _environment = environment;
         }

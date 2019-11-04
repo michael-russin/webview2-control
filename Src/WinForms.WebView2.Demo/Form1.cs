@@ -9,9 +9,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Russinsoft.WebView2.Interop;
-using WebView2Sharp.Events;
+using Russinsoft.WinForms;
 
-namespace WebView2Sharp.Demo.WinForms
+namespace WinForms.WebView2.Demo
 {
     public partial class Form1 : Form
     {
@@ -31,7 +31,7 @@ namespace WebView2Sharp.Demo.WinForms
 
             WebView2Loader.CreateEnvironmentWithDetails(string.Empty, string.Empty, string.Empty, (EnvironmentCreatedEventArgs environmentArgs) =>
             {
-                WebViewEnvironment webViewEnvironment = environmentArgs.WebViewEnvironment;
+                WebView2Environment webViewEnvironment = environmentArgs.WebViewEnvironment;
 
                 webViewEnvironment.CreateWebView(this.panel1.Handle, (CreateWebViewCompletedEventArgs args) =>
                 {
@@ -99,16 +99,16 @@ namespace WebView2Sharp.Demo.WinForms
             webView2Control2.Url = url;
         }
 
-        private void webView2Control2_NavigationCompleted(object sender, Events.NavigationCompletedEventArgs e)
+        private void webView2Control2_NavigationCompleted(object sender, NavigationCompletedEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("Navigation Completed " + e.IsSuccess);
         }
 
-        private void webView2Control2_NavigationStarting(object sender, Events.NavigationStartingEventArgs e)
+        private void webView2Control2_NavigationStarting(object sender, NavigationStartingEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("Navigation Starting " + e.IsUserInitiated);
 
-            HttpRequestHeaderCollection headerCollection = e.HttpHeaderCollection;
+            WebView2HttpRequestHeaderCollection headerCollection = e.HttpHeaderCollection;
             IReadOnlyDictionary<string, string> headers = headerCollection.HeaderDictionary;
             foreach (string key in headers.Keys)
             {

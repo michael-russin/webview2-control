@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebView2Sharp
+namespace Russinsoft.WinForms
 {
     internal static class ExternDll
     {

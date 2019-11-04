@@ -2,25 +2,21 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Russinsoft.WebView2.Interop;
-using WebView2Sharp.Events;
 
-namespace WebView2Sharp
+namespace Russinsoft.WinForms
 {
     public class WebView2ControlBase : Control
     {
-        private WebViewEnvironment _webViewEnvironment;
+        private WebView2Environment _webViewEnvironment;
         private WebView2WebView _webView2WebView;
 
         public WebView2ControlBase()
         {
         }
 
-        public WebView2ControlBase(WebViewEnvironment webViewEnvironment)
+        public WebView2ControlBase(WebView2Environment webViewEnvironment)
         {
             _webViewEnvironment = webViewEnvironment;
         }
@@ -39,7 +35,6 @@ namespace WebView2Sharp
                     string browserExecutableFolder = eventArgs.BrowserExecutableFolder ?? string.Empty;
                     string userDataFolder = eventArgs.UserDataFolder ?? string.Empty;
                     string browserArguments = eventArgs.BrowserArguments ?? string.Empty;
-
                     //WebView2Loader.CreateEnvironmentWithDetails(string.Empty, string.Empty, string.Empty, OnWebView2EnvironmentCreated);
                     WebView2Loader.CreateEnvironmentWithDetails(browserExecutableFolder, userDataFolder, browserArguments, OnWebView2EnvironmentCreated);
                 }

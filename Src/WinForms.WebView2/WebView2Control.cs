@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using WebView2Sharp.Events;
 
-namespace WebView2Sharp
+namespace Russinsoft.WinForms
 {
     public class WebView2Control : WebView2ControlBase
     {
@@ -17,7 +11,7 @@ namespace WebView2Sharp
             BackColor = SystemColors.ControlDark;
         }
 
-        public WebView2Control(WebViewEnvironment webViewEnvironment) :
+        public WebView2Control(WebView2Environment webViewEnvironment) :
             base(webViewEnvironment)
         {
             BackColor = SystemColors.ControlDark;

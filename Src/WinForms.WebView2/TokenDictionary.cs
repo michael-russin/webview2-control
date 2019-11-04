@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Russinsoft.WebView2.Interop;
 
-namespace WebView2Sharp
+namespace Russinsoft.WinForms
 {
     internal class TokenDictionary<A, H> where H : new()
     {

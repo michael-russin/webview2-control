@@ -6,14 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Russinsoft.WebView2.Interop;
 
-namespace WebView2Sharp
+namespace Russinsoft.WinForms
 {
-    public class HttpResponseHeaderCollection
+    public class WebView2HttpResponseHeaderCollection
     {
         private IWebView2HttpResponseHeaders _httpHeaders;
         private IDictionary<string, string> _headerNameValues;
 
-        internal HttpResponseHeaderCollection(IWebView2HttpResponseHeaders httpHeaders)
+        internal WebView2HttpResponseHeaderCollection(IWebView2HttpResponseHeaders httpHeaders)
         {
             _httpHeaders = httpHeaders;
             _headerNameValues = new Dictionary<string, string>();

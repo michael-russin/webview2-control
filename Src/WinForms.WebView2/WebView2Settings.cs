@@ -3,7 +3,7 @@
 using System;
 using Russinsoft.WebView2.Interop;
 
-namespace WebView2Sharp
+namespace Russinsoft.WinForms
 {
     public class WebView2Settings: IWebView2Settings
     {

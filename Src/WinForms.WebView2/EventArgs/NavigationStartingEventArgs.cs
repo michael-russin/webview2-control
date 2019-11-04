@@ -1,7 +1,7 @@
 ﻿using System;
 using Russinsoft.WebView2.Interop;
 
-namespace WebView2Sharp.Events
+namespace Russinsoft.WinForms
 {
     public class NavigationStartingEventArgs : EventArgs, IWebView2NavigationStartingEventArgs
     {
@@ -38,14 +38,14 @@ namespace WebView2Sharp.Events
             get => _args.IsRedirected;
         }
 
-        private HttpRequestHeaderCollection _httpHeaderCollection;
-        public HttpRequestHeaderCollection HttpHeaderCollection
+        private WebView2HttpRequestHeaderCollection _httpHeaderCollection;
+        public WebView2HttpRequestHeaderCollection HttpHeaderCollection
         {
             get
             {
                 if (_httpHeaderCollection == null)
                 {
-                    _httpHeaderCollection = new HttpRequestHeaderCollection(_args.RequestHeaders);
+                    _httpHeaderCollection = new WebView2HttpRequestHeaderCollection(_args.RequestHeaders);
                 }
                 return _httpHeaderCollection;
             }

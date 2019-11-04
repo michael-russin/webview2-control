@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebView2Sharp.Handlers
+namespace Russinsoft.WinForms.Handlers
 {
     internal class HandlerBase<T>
     {

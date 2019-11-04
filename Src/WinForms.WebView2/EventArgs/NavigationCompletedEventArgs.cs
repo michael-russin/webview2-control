@@ -1,7 +1,7 @@
 ﻿using System;
 using Russinsoft.WebView2.Interop;
 
-namespace WebView2Sharp.Events
+namespace Russinsoft.WinForms
 {
     public class NavigationCompletedEventArgs : EventArgs, IWebView2NavigationCompletedEventArgs
     {

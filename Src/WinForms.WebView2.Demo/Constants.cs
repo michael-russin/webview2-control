@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebView2Sharp.Demo.WinForms
+namespace WinForms.WebView2.Demo
 {
     public enum Messages : int
     {

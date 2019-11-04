@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{6B529903-1191-450F-BF2C-BD001ECC221F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>WebView2Sharp.Demo.WinForms</RootNamespace>
-    <AssemblyName>WebView2Sharp.Demo.WinForms</AssemblyName>
+    <RootNamespace>WinForms.WebView2.Demo</RootNamespace>
+    <AssemblyName>WinForms.WebView2.Demo</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -38,12 +38,15 @@
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>app.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Russinsoft.WebView2.Interop">
-      <HintPath>..\..\WebView2.Interop\bin\x86\Debug\Russinsoft.WebView2.Interop.dll</HintPath>
+    <Reference Include="Russinsoft.WebView2.Interop, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Russinsoft.WebView2.Interop.1.0.0.1\lib\net461\Russinsoft.WebView2.Interop.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -76,7 +79,6 @@
     <Compile Include="WebView2Browser.Designer.cs">
       <DependentUpon>WebView2Browser.cs</DependentUpon>
     </Compile>
-    <Compile Include="WebView2CreateWebView2EnvironmentCompletedHandler.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -109,12 +111,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WinForms.WebView2\WinForms.WebView2.csproj">
-      <Project>{5cecfa1a-348f-49a1-b50d-edcd5000245e}</Project>
-      <Name>WebView2Sharp</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
+    <Content Include="app.ico" />
     <Content Include="Content\commands.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -244,6 +241,12 @@
     <Content Include="Content\controls_ui\tabs.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WinForms.WebView2\WinForms.WebView2.csproj">
+      <Project>{5cecfa1a-348f-49a1-b50d-edcd5000245e}</Project>
+      <Name>WinForms.WebView2</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Web.WebView2.0.8.270\build\Microsoft.Web.WebView2.targets" Condition="Exists('..\packages\Microsoft.Web.WebView2.0.8.270\build\Microsoft.Web.WebView2.targets')" />

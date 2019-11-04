@@ -5,13 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Russinsoft.WebView2.Interop;
 
-namespace WebView2Sharp
+namespace Russinsoft.WinForms
 {
-    public class WebResourceResponse : IWebView2WebResourceResponse
+    public class WebView2WebResourceResponse : IWebView2WebResourceResponse
     {
         internal IWebView2WebResourceResponse _response;
 
-        internal WebResourceResponse(IWebView2WebResourceResponse response)
+        internal WebView2WebResourceResponse(IWebView2WebResourceResponse response)
         {
             _response = response;
         }
@@ -22,9 +22,9 @@ namespace WebView2Sharp
             set { _response.Content = value; }
         }
 
-        public HttpResponseHeaderCollection Headers
+        public WebView2HttpResponseHeaderCollection Headers
         {
-            get { return new HttpResponseHeaderCollection(_response.Headers); }
+            get { return new WebView2HttpResponseHeaderCollection(_response.Headers); }
         }
 
         public int StatusCode

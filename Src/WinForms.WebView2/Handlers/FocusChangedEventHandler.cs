@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Russinsoft.WebView2.Interop;
-using WebView2Sharp.Handlers;
+using Russinsoft.WinForms.Handlers;
 
-namespace WebView2Sharp.Events
+namespace Russinsoft.WinForms.Handlers
 {
     internal class WebView2FocusChangedEventHandler : HandlerBase<FocusChangedEventEventArgs>,
         IWebView2FocusChangedEventHandler

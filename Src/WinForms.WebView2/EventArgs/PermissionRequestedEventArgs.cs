@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Russinsoft.WebView2.Interop;
 
-namespace WebView2Sharp.Events
+namespace Russinsoft.WinForms
 {
     public class PermissionRequestedEventArgs : EventArgs, IWebView2PermissionRequestedEventArgs
     {
@@ -39,7 +35,7 @@ namespace WebView2Sharp.Events
 
         public IWebView2Deferral GetDeferral()
         {
-            return new Deferral(_args.GetDeferral());
+            return new WebView2Deferral(_args.GetDeferral());
         }
     }
 }

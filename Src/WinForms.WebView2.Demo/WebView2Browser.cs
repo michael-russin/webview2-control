@@ -13,9 +13,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Russinsoft.WebView2.Interop;
-using WebView2Sharp.Events;
+using Russinsoft.WinForms;
 
-namespace WebView2Sharp.Demo.WinForms
+namespace WinForms.WebView2.Demo
 {
     public partial class WebView2Browser : Form
     {
@@ -254,6 +254,7 @@ namespace WebView2Sharp.Demo.WinForms
                 case Messages.MG_SHOW_OPTIONS:
                     {
                         _optionsWebView.Visible = true;
+                        ResizeUIWebViews();
                         _optionsWebView.BringToFront();
                         _optionsWebView.MoveFocus(WEBVIEW2_MOVE_FOCUS_REASON.WEBVIEW2_MOVE_FOCUS_REASON_PROGRAMMATIC);
                     }
@@ -414,12 +415,13 @@ namespace WebView2Sharp.Demo.WinForms
         {
             if (_optionsWebView != null)
             {
-                OperatingSystem os = Environment.OSVersion;
                 int dpiDropdownWidth = (int)GetDPIAwareBound(OptionsDropdownWidth);
+                int dpiBarHeight = (int)GetDPIAwareBound(UIBarHeight);
+                int dpiDropdownHeight = (int)GetDPIAwareBound(OptionsDropdownHeight);
                 int x = (int)Bounds.Right - dpiDropdownWidth;
 
-                Rectangle bounds = new Rectangle(new Point(x, (int)GetDPIAwareBound(UIBarHeight)),
-                    new Size(dpiDropdownWidth, (int)GetDPIAwareBound(OptionsDropdownHeight)));
+                Rectangle bounds = new Rectangle(new Point(x, dpiBarHeight),
+                    new Size(dpiDropdownWidth, dpiDropdownHeight));
             //            bounds.top = GetDPIAwareBound(c_uiBarHeight);
             //            bounds.Height = bounds.top + GetDPIAwareBound(c_optionsDropdownHeight);
             //            bounds.left = bounds.right - GetDPIAwareBound(c_optionsDropdownWidth);
@@ -847,8 +849,8 @@ namespace WebView2Sharp.Demo.WinForms
             }
         }
 
-        private WebViewEnvironment _contentEnvironment;
-        private WebViewEnvironment _controlEnvironment;
+        private WebView2Environment _contentEnvironment;
+        private WebView2Environment _controlEnvironment;
 
         private void webView2Control2_EnvironmentCreated(object sender, EnvironmentCreatedEventArgs e)
         {
@@ -900,7 +902,8 @@ namespace WebView2Sharp.Demo.WinForms
             // Remove the GetDpiForWindow call when using Windows 7 or any version
             // below 1607 (Windows 10). You will also have to make sure the build
             // directory is clean before building again.
-            return (bound * (int)GetDpiForWindow(Handle) / DEFAULT_DPI);
+            int dpiForWindow = (int)GetDpiForWindow(Handle);
+            return (bound * dpiForWindow / DEFAULT_DPI);
         }
     }
 }

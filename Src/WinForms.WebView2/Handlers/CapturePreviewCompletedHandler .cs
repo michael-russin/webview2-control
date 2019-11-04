@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Russinsoft.WebView2.Interop;
 
-namespace WebView2Sharp.Handlers
+namespace Russinsoft.WinForms.Handlers
 {
     public class WebView2CapturePreviewCompletedHandler : IWebView2CapturePreviewCompletedHandler
     {

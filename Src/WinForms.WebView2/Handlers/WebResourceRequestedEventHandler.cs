@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Russinsoft.WebView2.Interop;
-using WebView2Sharp.Events;
 
-namespace WebView2Sharp.Handlers
+namespace Russinsoft.WinForms.Handlers
 {
     /// <summary>
     /// Fires when an HTTP request is made in the webview. The host can override

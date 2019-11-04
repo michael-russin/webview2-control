@@ -1,4 +1,6 @@
-﻿namespace WebView2Sharp.Demo.WinForms
+﻿using Russinsoft.WinForms;
+
+namespace WinForms.WebView2.Demo
 {
     partial class Form1
     {
@@ -33,7 +35,7 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.textBoxUrl = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
-            this.webView2Control2 = new WebView2Sharp.WebView2Control();
+            this.webView2Control2 = new WebView2Control();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -103,8 +105,8 @@
             this.webView2Control2.TabIndex = 5;
             this.webView2Control2.Text = "webView2Control2";
             this.webView2Control2.Url = "https://www.bing.com";
-            this.webView2Control2.NavigationStarting += new System.EventHandler<WebView2Sharp.Events.NavigationStartingEventArgs>(this.webView2Control2_NavigationStarting);
-            this.webView2Control2.NavigationCompleted += new System.EventHandler<WebView2Sharp.Events.NavigationCompletedEventArgs>(this.webView2Control2_NavigationCompleted);
+            this.webView2Control2.NavigationStarting += new System.EventHandler<NavigationStartingEventArgs>(this.webView2Control2_NavigationStarting);
+            this.webView2Control2.NavigationCompleted += new System.EventHandler<NavigationCompletedEventArgs>(this.webView2Control2_NavigationCompleted);
             // 
             // Form1
             // 

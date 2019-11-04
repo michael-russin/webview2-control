@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using Russinsoft.WebView2.Interop;
-using WebView2Sharp.Events;
-using WebView2Sharp.Handlers;
-using static WebView2Sharp.SafeNativeMethods;
+using Russinsoft.WinForms.Handlers;
 
-namespace WebView2Sharp
+namespace Russinsoft.WinForms
 {
     public class WebView2WebView : IWebView2WebView3
     {
@@ -400,7 +394,7 @@ namespace WebView2Sharp
 
         public long RegisterWebMessageReceived(Action<WebMessageReceivedEventArgs> callback)
         {
-            WebView2WebMessageReceivedEventHandler completedHandler = new WebView2WebMessageReceivedEventHandler(callback);
+            WebMessageReceivedEventHandler completedHandler = new WebMessageReceivedEventHandler(callback);
 
             EventRegistrationToken token;
             _webview.add_WebMessageReceived(completedHandler, out token);
@@ -446,7 +440,7 @@ namespace WebView2Sharp
 
         public long RegisterZoomFactorChanged(Action<ZoomFactorCompletedEventArgs> callback)
         {
-            WebView2ZoomFactorChangedEventHandler completedHandler = new WebView2ZoomFactorChangedEventHandler(callback);
+            ZoomFactorChangedEventHandler completedHandler = new ZoomFactorChangedEventHandler(callback);
 
             EventRegistrationToken token;
             _webview.add_ZoomFactorChanged(completedHandler, out token);

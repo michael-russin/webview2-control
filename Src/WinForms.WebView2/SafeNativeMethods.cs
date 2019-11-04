@@ -6,7 +6,7 @@ using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebView2Sharp
+namespace Russinsoft.WinForms
 {
     [SuppressUnmanagedCodeSecurity]
     internal static class SafeNativeMethods

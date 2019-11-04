@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Russinsoft.WebView2.Interop;
 
-namespace WebView2Sharp.Events
+namespace Russinsoft.WinForms
 {
     public class NewWindowRequestedEventArgs : EventArgs, IWebView2NewWindowRequestedEventArgs
     {
@@ -24,9 +20,9 @@ namespace WebView2Sharp.Events
 
         public string Uri => _args.Uri;
 
-        public Deferral GetDeferal()
+        public WebView2Deferral GetDeferal()
         {
-            return new Deferral(_args.GetDeferral());
+            return new WebView2Deferral(_args.GetDeferral());
         }
 
         IWebView2Deferral IWebView2NewWindowRequestedEventArgs.GetDeferral()

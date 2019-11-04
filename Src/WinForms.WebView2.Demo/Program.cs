@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace WebView2Sharp.Demo.WinForms
+namespace WinForms.WebView2.Demo
 {
     static class Program
     {

@@ -5,13 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Russinsoft.WebView2.Interop;
 
-namespace WebView2Sharp
+namespace Russinsoft.WinForms
 {
-    public class WebResourceRequest: IWebView2WebResourceRequest
+    public class WebView2WebResourceRequest : IWebView2WebResourceRequest
     {
         private IWebView2WebResourceRequest _request;
 
-        internal WebResourceRequest(IWebView2WebResourceRequest request)
+        internal WebView2WebResourceRequest(IWebView2WebResourceRequest request)
         {
             _request = request;
         }
@@ -52,9 +52,9 @@ namespace WebView2Sharp
         /// <summary>
         /// The mutable HTTP request headers
         /// </summary>
-        public HttpRequestHeaderCollection Headers
+        public WebView2HttpRequestHeaderCollection Headers
         {
-            get { return new HttpRequestHeaderCollection(_request.Headers); }
+            get { return new WebView2HttpRequestHeaderCollection(_request.Headers); }
         }
 
         public string uri { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }

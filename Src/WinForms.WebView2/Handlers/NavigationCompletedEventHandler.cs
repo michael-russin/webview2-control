@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Russinsoft.WebView2.Interop;
 
-namespace WebView2Sharp.Events
+namespace Russinsoft.WinForms.Handlers
 {
     internal class WebView2NavigationCompletedEventHandler : IWebView2NavigationCompletedEventHandler
     {

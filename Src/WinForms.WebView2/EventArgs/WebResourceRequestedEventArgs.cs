@@ -1,37 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Russinsoft.WebView2.Interop;
 
-namespace WebView2Sharp.Events
+namespace Russinsoft.WinForms
 {
     public class WebResourceRequestedEventArgs : EventArgs, IWebView2WebResourceRequestedEventArgs
     {
         private IWebView2WebResourceRequestedEventArgs _args;
-        private WebResourceResponse _webResponse;
+        private WebView2WebResourceResponse _webResponse;
 
         internal WebResourceRequestedEventArgs(IWebView2WebResourceRequestedEventArgs args)
         {
             _args = args;
-            _webResponse = new WebResourceResponse(_args.Response);
+            _webResponse = new WebView2WebResourceResponse(_args.Response);
         }
 
-        public WebResourceRequest Request
+        public WebView2WebResourceRequest Request
         {
-            get { return new WebResourceRequest(_args.Request); }
+            get { return new WebView2WebResourceRequest(_args.Request); }
         }
 
-        public WebResourceResponse Response
+        public WebView2WebResourceResponse Response
         {
             get { return _webResponse; }
             set { _args.Response = _webResponse._response; }
         }
 
-        public Deferral GetDeferral()
+        public WebView2Deferral GetDeferral()
         {
-            return new Deferral(_args.GetDeferral());
+            return new WebView2Deferral(_args.GetDeferral());
         }
 
         IWebView2Deferral IWebView2WebResourceRequestedEventArgs.GetDeferral()

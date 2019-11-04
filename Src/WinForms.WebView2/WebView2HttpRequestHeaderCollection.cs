@@ -7,14 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Russinsoft.WebView2.Interop;
 
-namespace WebView2Sharp
+namespace Russinsoft.WinForms
 {
-    public class HttpRequestHeaderCollection 
+    public class WebView2HttpRequestHeaderCollection 
     {
         private IWebView2HttpRequestHeaders _httpHeaders;
         private IDictionary<string, string> _headerNameValues;
 
-        internal HttpRequestHeaderCollection(IWebView2HttpRequestHeaders httpHeaders)
+        internal WebView2HttpRequestHeaderCollection(IWebView2HttpRequestHeaders httpHeaders)
         {
             _httpHeaders = httpHeaders;
             _headerNameValues = new Dictionary<string, string>();
