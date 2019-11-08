@@ -3,36 +3,36 @@
 
 |WebView2 Native|WebVeiw2Control|Tested|
 |---|---|---|
-|get_Settings([out, retval] IWebView2Settings** settings)|   |   |
-|get_Source([out, retval] LPWSTR* uri)|   |   |
-|Navigate([in] LPCWSTR uri)|   |   |
+|get_Settings|properties expoesed on control   |   |
+|get_Source([out, retval] LPWSTR* uri)|Source property   |   |
+|Navigate([in] LPCWSTR uri)|Url property and Navigate method   |   |
 |MoveFocus([in] WEBVIEW2_MOVE_FOCUS_REASON reason)|  |  |
-|NavigateToString([in] LPCWSTR htmlContent)|   |   |
-|add/remove NavigationStarting|  |  |
-|add/remove DocumentStateChanged|  |  |
-|add/remove NavigationCompleted|  |  |
-|add/remove FrameNavigationStarting|  |  |
-|add/remove MoveFocusRequested|  |  |
-|add/remove GotFocus|  |  |
-|add/remove LostFocus|  |  |
+|NavigateToString([in] LPCWSTR htmlContent)| NavigateToString method  |   |
+|add/remove NavigationStarting| NavigationStarting event  |  |
+|add/remove DocumentStateChanged| DocumentStateChanged event |  |
+|add/remove NavigationCompleted| NavigationCompleted completed |  |
+|add/remove FrameNavigationStarting|FrameNavigationStarting  |  |
+|add/remove MoveFocusRequested| MoveFocusRequested |  |
+|add/remove GotFocus| Control.GotFocus event |  |
+|add/remove LostFocus| Control.LostFocus  |  |
 |add/remove WebResourceRequested|  |  |
-|add/remove ScriptDialogOpening|  |  |
-|add/remove ZoomFactorChanged|  |  |
-|add/remove PermissionRequested|  |  |
-|add/remove ProcessFailed|  |  |
+|add/remove ScriptDialogOpening| ScriptDialogOpening event   |  |
+|add/remove ZoomFactorChanged| ZoomFactorChanged event  |  |
+|add/remove PermissionRequested| PermissionRequested event|  |
+|add/remove ProcessFailed| ProcessFailed |  |
 |AddScriptToExecuteOnDocumentCreated|  |  |
 |RemoveScriptToExecuteOnDocumentCreated|  |  |
 |ExecuteScript|  |  |
 |CapturePreview|  |  |
 |Reload|  |  |
-|get_Bounds|  |  |
-|put_Bounds|  |  |
-|get_ZoomFactor|  |  |
-|put_ZoomFactor|  |  |
-|get_IsVisible|  |  |
-|put_IsVisible|  |  |
-|PostWebMessageAsJson|  |  |
-|PostWebMessageAsString|  |  |
+|get_Bounds| Control.Bounds property |  |
+|put_Bounds| Control.Bounds property |  |
+|get_ZoomFactor| ZoomFactor property  |  |
+|put_ZoomFactor|  ZoomFactor property |  |
+|get_IsVisible| Control.Visible  |  |
+|put_IsVisible| Control.Visible |  |
+|PostWebMessageAsJson| PostWebMessageAsJson |  |
+|PostWebMessageAsString| PostWebMessageAsString  |  |
 |add_WebMessageReceived|  |  |
 |remove_WebMessageReceived|  |  |
 |Close|  |  |
@@ -40,7 +40,7 @@
 |add_DevToolsProtocolEventReceived|  |  |
 |remove_DevToolsProtocolEventReceived|  |  |
 |get_BrowserProcessId|  |  |
-|get_CanGoBack|  |  |
-|get_CanGoForward|  |  |
-|GoBack|  |  |
-|GoForward|  |  |
+|get_CanGoBack| CanGoBack property |  |
+|get_CanGoForward| CanGoForward property  |  |
+|GoBack| GoBack method  |  |
+|GoForward| GoForward method |  |
