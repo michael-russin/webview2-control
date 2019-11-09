@@ -2,18 +2,14 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Russinsoft.WebView2.Interop;
-using Russinsoft.WinForms;
+using MtrDev.WinForms;
 
 namespace WinForms.WebView2.Demo
 {
@@ -229,7 +225,7 @@ namespace WinForms.WebView2.Demo
                     break;
                 case Messages.MG_CANCEL:
                     {
-                        _tabDictionary[_activeTabId].CallDevToolsProtocolMethod("Page.stopLoading", "{}");
+                        _tabDictionary[_activeTabId].CallDevToolsProtocolMethod("Page.stopLoading", "{}", null);
                     }
                     break;
                 case Messages.MG_SWITCH_TAB:
@@ -248,7 +244,7 @@ namespace WinForms.WebView2.Demo
                     break;
                 case Messages.MG_CLOSE_WINDOW:
                     {
-                        //DestroyWindow(m_hWnd);
+                        Close();
                     }
                     break;
                 case Messages.MG_SHOW_OPTIONS:
@@ -256,7 +252,8 @@ namespace WinForms.WebView2.Demo
                         _optionsWebView.Visible = true;
                         ResizeUIWebViews();
                         _optionsWebView.BringToFront();
-                        _optionsWebView.MoveFocus(WEBVIEW2_MOVE_FOCUS_REASON.WEBVIEW2_MOVE_FOCUS_REASON_PROGRAMMATIC);
+                        //_optionsWebView.MoveFocus(WEBVIEW2_MOVE_FOCUS_REASON.WEBVIEW2_MOVE_FOCUS_REASON_PROGRAMMATIC);
+                        _optionsWebView.Focus();
                     }
                     break;
                 case Messages.MG_HIDE_OPTIONS:
@@ -266,7 +263,8 @@ namespace WinForms.WebView2.Demo
                     break;
                 case Messages.MG_OPTION_SELECTED:
                     {
-                        _tabDictionary[_activeTabId].MoveFocus(WEBVIEW2_MOVE_FOCUS_REASON.WEBVIEW2_MOVE_FOCUS_REASON_PROGRAMMATIC);
+                        //_tabDictionary[_activeTabId].MoveFocus(WEBVIEW2_MOVE_FOCUS_REASON.WEBVIEW2_MOVE_FOCUS_REASON_PROGRAMMATIC);
+                        _tabDictionary[_activeTabId].Focus();
                     }
                     break;
                 case Messages.MG_GET_FAVORITES:
@@ -871,25 +869,25 @@ namespace WinForms.WebView2.Demo
 
         private bool ClearContentCache()
         {
-            _tabDictionary[_activeTabId].CallDevToolsProtocolMethod("Network.clearBrowserCache", "{}");
+            _tabDictionary[_activeTabId].CallDevToolsProtocolMethod("Network.clearBrowserCache", "{}", null);
             return true;
         }
 
         private bool ClearControlsCache()
         {
-            _tabDictionary[_activeTabId].CallDevToolsProtocolMethod("Network.clearBrowserCache", "{}");
+            _tabDictionary[_activeTabId].CallDevToolsProtocolMethod("Network.clearBrowserCache", "{}", null);
             return true;
         }
 
         private bool ClearContentCookies()
         {
-            _tabDictionary[_activeTabId].CallDevToolsProtocolMethod("Network.clearBrowserCookies", "{}");
+            _tabDictionary[_activeTabId].CallDevToolsProtocolMethod("Network.clearBrowserCookies", "{}", null);
             return true;
         }
 
         private bool ClearControlsCookies()
         {
-            controlsWebView2.CallDevToolsProtocolMethod("Network.clearBrowserCookies", "{}");
+            controlsWebView2.CallDevToolsProtocolMethod("Network.clearBrowserCookies", "{}", null);
             return true;
         }
 

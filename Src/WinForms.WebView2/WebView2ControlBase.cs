@@ -1,357 +1,229 @@
-﻿using System;
+﻿#region License
+// Copyright (c) 2019 Michael T. Russin
+//
+// Permission is hereby granted, free of charge, to any person
+// obtaining a copy of this software and associated documentation
+// files (the "Software"), to deal in the Software without
+// restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the
+// Software is furnished to do so, subject to the following
+// conditions:
+//
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+// OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+// WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+// OTHER DEALINGS IN THE SOFTWARE.
+#endregion
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms;
-using Russinsoft.WebView2.Interop;
+using MtrDev.WebView2.Interop;
+using MtrDev.WinForms.Properties;
 
-namespace Russinsoft.WinForms
+namespace MtrDev.WinForms
 {
     public class WebView2ControlBase : Control
     {
-        private WebView2Environment _webViewEnvironment;
-        private WebView2WebView _webView2WebView;
-
-        public WebView2ControlBase()
+        #region Public Unavailable Methods
+        //DrawToBitmap doesn't work for this control, so we should hide it.  We'll
+        //still call base so that this has a chance to work if it can.
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        new public void DrawToBitmap(Bitmap bitmap, Rectangle targetBounds)
         {
+            base.DrawToBitmap(bitmap, targetBounds);
         }
 
-        public WebView2ControlBase(WebView2Environment webViewEnvironment)
-        {
-            _webViewEnvironment = webViewEnvironment;
-        }
+        #endregion
 
-        protected override void CreateHandle()
-        {
-            base.CreateHandle();
+        #region Public Unavailable Proprties
+        // -------------------------------------------------------------
+        //
+        // Properties blocked at design time and run time:
+        //
 
-            if (!DesignMode)
-            {
-                if (_webViewEnvironment == null)
-                {
-                    BeforeEnvironmentCreatedEventArgs eventArgs = new BeforeEnvironmentCreatedEventArgs();
-                    OnBeforeEnvironmentCreated(eventArgs);
-
-                    string browserExecutableFolder = eventArgs.BrowserExecutableFolder ?? string.Empty;
-                    string userDataFolder = eventArgs.UserDataFolder ?? string.Empty;
-                    string browserArguments = eventArgs.BrowserArguments ?? string.Empty;
-                    //WebView2Loader.CreateEnvironmentWithDetails(string.Empty, string.Empty, string.Empty, OnWebView2EnvironmentCreated);
-                    WebView2Loader.CreateEnvironmentWithDetails(browserExecutableFolder, userDataFolder, browserArguments, OnWebView2EnvironmentCreated);
-                }
-                else
-                {
-                    _webViewEnvironment.CreateWebView(Handle, OnWebViewCreated);
-                }
-            }
-        }
-
-        private void OnWebView2EnvironmentCreated(EnvironmentCreatedEventArgs args)
-        {
-            _webViewEnvironment = args.WebViewEnvironment;
-
-            OnEnvironmentCreated(args);
-
-            _webViewEnvironment.CreateWebView(Handle, OnWebViewCreated);
-        }
-
-        private void OnWebViewCreated(CreateWebViewCompletedEventArgs args)
-        {
-            int result = args.Result;
-            WebView2WebView webView = args.WebView;
-
-            if (webView != null)
-            {
-                _webView2WebView = webView;
-            }
-
-            RegisterHandlers();
-
-            // Resize WebView to fit the bounds of the parent window
-            _webView2WebView.Bounds = new Rectangle(new Point(0, 0), Size);
-
-            // Set any properties that we have cached because the browser wasn't created yet
-            AreDevToolsEnabled = _initialAreDevToolsEnabled;
-            IsFullscreenAllowed = _initialIsFullscreenAllowed;
-            ZoomFactor = _initialZoomFactor;
-
-            OnBrowserCreated(EventArgs.Empty);
-
-            if (!string.IsNullOrEmpty(_internalUrl))
-            {
-                // Schedule an async task to navigate to Bing
-                _webView2WebView.Navigate(_internalUrl);
-            }
-
-        }
-
-        protected override void DestroyHandle()
-        {
-            UnregisterHandlers();
-            base.DestroyHandle();
-        }
-
-        private IDictionary<HandlerType, long> _handlerTokenDictionary = new Dictionary<HandlerType, long>();
-        private IDictionary<string, long> _devToolsProtocolEventTokenDictionary = new Dictionary<string, long>();
-        private bool _handlersRegistered = false;
-        private void RegisterHandlers()
-        {
-            _handlerTokenDictionary.Add(HandlerType.NavigationComplete, _webView2WebView.RegisterNavigationCompleted(OnNavigationCompleted));
-            _handlerTokenDictionary.Add(HandlerType.NavigationStarting, _webView2WebView.RegisterNavigationStarting(OnNavigationStarting));
-            _handlerTokenDictionary.Add(HandlerType.ZoomFactorChanged, _webView2WebView.RegisterZoomFactorChanged(OnZoomFactorChanged));
-            _handlerTokenDictionary.Add(HandlerType.WebMessageReceived, _webView2WebView.RegisterWebMessageReceived(OnWebMessageRecieved));
-            _handlerTokenDictionary.Add(HandlerType.DocumentStateChanged, _webView2WebView.RegisterDocumentStateChanged(OnDocumentStateChanged));
-            _handlerTokenDictionary.Add(HandlerType.LostFocus, _webView2WebView.RegisterLostFocus(OnBrowserLostFocus));
-            _handlerTokenDictionary.Add(HandlerType.FrameNavigationStarting, _webView2WebView.RegisterFrameNavigationStarting(OnFrameNavigationStarting));
-            _handlerTokenDictionary.Add(HandlerType.MoveFocusRequested, _webView2WebView.RegisterMoveFocusRequested(OnMoveFocusRequested));
-            _handlerTokenDictionary.Add(HandlerType.GotFocus, _webView2WebView.RegisterGotFocusdEvent(OnGotFocus));
-            _handlerTokenDictionary.Add(HandlerType.ScriptDialogOpening, _webView2WebView.RegisterScriptDialogOpening(OnScriptDialogOpening));
-            _handlerTokenDictionary.Add(HandlerType.PermissionRequested, _webView2WebView.RegisterPermissionRequested(OnPermissionRequested));
-            _handlerTokenDictionary.Add(HandlerType.ProcessFailed, _webView2WebView.RegisterProcessFailed(OnProcessFailed));
-            _handlersRegistered = true;
-        }
-
-        private void UnregisterHandlers()
-        {
-            if (!_handlersRegistered)
-                return;
-            foreach(long token in _devToolsProtocolEventTokenDictionary.Values)
-            {
-                _webView2WebView.UnregisterDevToolsProtocolEventReceived(token);
-            }
-            _webView2WebView.UnregisterNavigationCompleted(_handlerTokenDictionary[HandlerType.NavigationComplete]);
-            _webView2WebView.UnregisterNavigationStarting(_handlerTokenDictionary[HandlerType.NavigationStarting]);
-            _webView2WebView.UnregisterZoomFactorChanged(_handlerTokenDictionary[HandlerType.ZoomFactorChanged]);
-            _webView2WebView.UnregisterWebMessageReceived(_handlerTokenDictionary[HandlerType.WebMessageReceived]);
-            _webView2WebView.UnregisterDocumentStateChanged(_handlerTokenDictionary[HandlerType.DocumentStateChanged]);
-            _webView2WebView.UnregisterLostFocus(_handlerTokenDictionary[HandlerType.LostFocus]);
-            _webView2WebView.UnregisterFrameNavigationStarting(_handlerTokenDictionary[HandlerType.FrameNavigationStarting]);
-            _webView2WebView.UnregisterMoveFocusRequested(_handlerTokenDictionary[HandlerType.MoveFocusRequested]);
-            _webView2WebView.UnregisterGotFocusEvent(_handlerTokenDictionary[HandlerType.GotFocus]);
-            _webView2WebView.UnregisterWebResourceRequested(_handlerTokenDictionary[HandlerType.WebResourceRequested]);
-            _webView2WebView.UnregisterScriptDialogOpening(_handlerTokenDictionary[HandlerType.ScriptDialogOpening]);
-            _webView2WebView.UnregisterPermissionRequested(_handlerTokenDictionary[HandlerType.PermissionRequested]);
-            _webView2WebView.UnregisterProcessFailed(_handlerTokenDictionary[HandlerType.ProcessFailed]);
-        }
-
-        protected virtual void OnBeforeEnvironmentCreated(BeforeEnvironmentCreatedEventArgs e)
-        {
-        }
-
-        protected virtual void OnEnvironmentCreated(EnvironmentCreatedEventArgs e)
-        {
-        }
-
-        protected virtual void OnBrowserCreated(EventArgs e)
-        {
-        }
-
-        protected virtual void OnNavigationCompleted(NavigationCompletedEventArgs e)
-        {
-        }
-
-        protected virtual void OnNavigationStarting(NavigationStartingEventArgs e)
-        {
-        }
-
-        protected virtual void OnZoomFactorChanged(ZoomFactorCompletedEventArgs e)
-        {
-        }
-
-        protected virtual void OnWebMessageRecieved(WebMessageReceivedEventArgs e)
-        {
-        }
-
-        protected virtual void OnDevToolsProtocolEventReceived(DevToolsProtocolEventReceivedEventArgs e)
-        {
-        }
-
-        protected virtual void OnDocumentStateChanged(DocumentStateChangedEventArgs e)
-        {
-        }
-
-        private void OnBrowserLostFocus(FocusChangedEventEventArgs e)
-        {
-            base.OnLostFocus(EventArgs.Empty);
-        }
-
-        protected virtual void OnFrameNavigationStarting(NavigationStartingEventArgs e)
-        {
-
-        }
-
-        protected virtual void OnMoveFocusRequested(MoveFocusRequestedEventArgs e)
-        {
-
-        }
-
-        protected virtual void OnWebResourceRequested(WebResourceRequestedEventArgs e)
-        {
-
-        }
-
-        protected virtual void OnScriptDialogOpening(ScriptDialogOpeningEventArgs e)
-        {
-        }
-
-        protected virtual void OnPermissionRequested(PermissionRequestedEventArgs e)
-        {
-        }
-
-        protected virtual void OnProcessFailed(ProcessFailedEventArgs e)
-        {
-        }
-
-        protected void ResizeWebView()
-        {
-            if (_webView2WebView == null) return;
-
-            // Resize WebView to fit the bounds of the parent window
-            _webView2WebView.Bounds = new Rectangle(new Point(0, 0), Size);
-        }
-
-        private string _internalUrl;
-
-        protected string InternalUrl
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
+         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public override Color BackColor
         {
             get
             {
-                if (_webView2WebView == null)
-                    return _internalUrl;
-                return _webView2WebView.Source;
+                if (DesignMode)
+                    return SystemColors.ControlDark;
+                return base.BackColor;
+            }
+            set
+            {
+                base.BackColor = value;
             }
         }
 
-        public void Navigate(string url)
-        {
-            InternalNavigate(url);
-        }
 
-        public void GoForward()
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
+        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public override Font Font
         {
-            if (_webView2WebView != null)
+            get
             {
-                _webView2WebView.GoForward();
+                return base.Font;
+            }
+            set
+            {
+                base.Font = value;
             }
         }
 
-        public void GoBack()
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
+         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public override Color ForeColor
         {
-            if (_webView2WebView != null)
+            get
             {
-                _webView2WebView.GoBack();
+                return base.ForeColor;
+            }
+            set
+            {
+                base.ForeColor = value;
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
+         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        new public ImeMode ImeMode
+        {
+            get
+            {
+                return base.ImeMode;
+            }
+            set
+            {
+                base.ImeMode = value;
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
+         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public override bool AllowDrop
+        {
+            get
+            {
+                return base.AllowDrop;
+            }
+            set
+            {
+                throw new NotSupportedException(Resources.WebView2AllowDropNotSupport);
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
+         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public override Image BackgroundImage
+        {
+            get
+            {
+                return base.BackgroundImage;
+            }
+            set
+            {
+                throw new NotSupportedException(Resources.WebView2BackgroundImageNotSupported);
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
+        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public override ImageLayout BackgroundImageLayout
+        {
+            get
+            {
+                return base.BackgroundImageLayout;
+            }
+            set
+            {
+                throw new NotSupportedException(Resources.WebView2BackgroundImageLayoutNotSupported);
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
+        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public override Cursor Cursor
+        {
+            get
+            {
+                return base.Cursor;
+            }
+            set
+            {
+                throw new NotSupportedException(Resources.WebView2CursorNotSupported);
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
+       DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        new public bool Enabled
+        {
+            get
+            {
+                return base.Enabled;
+            }
+            set
+            {
+                throw new NotSupportedException(Resources.WebView2EnabledNotSupported);
             }
         }
 
         /// <summary>
-        /// Reload the current page. This is similar to navigating to the URI of
-        /// current top level document including all navigation events firing and
-        /// respecting any entries in the HTTP cache. But, the back/forward history
-        /// will not be modified.
+        /// This property is not meaningful for this control.
         /// </summary>
-        public void Reload()
-        {
-            if (_webView2WebView != null)
-            {
-                _webView2WebView.Reload();
-            }
-        }
-
-        public void PostWebMessageAsString(string json)
-        {
-            if (_webView2WebView != null)
-            {
-                _webView2WebView.PostWebMessageAsString(json);
-            }
-        }
-
-        /// <summary>
-        /// Post the specified webMessage to the top level document in this
-        /// IWebView2WebView. The top level document's window.chrome.webview's message
-        /// event fires. JavaScript in that document may subscribe and unsubscribe to
-        /// the event via the following:
-        /// ```
-        ///    window.chrome.webview.addEventListener('message', handler)
-        ///    window.chrome.webview.removeEventListener('message', handler)
-        /// ```
-        /// The event args is an instance of `MessageEvent`.
-        /// The IWebView2Settings::IsWebMessageEnabled setting must be true or this method
-        /// will fail with E_INVALIDARG.
-        /// The event arg's data property is the webMessage string parameter parsed
-        /// as a JSON string into a JavaScript object.
-        /// The event arg's source property is a reference to the
-        /// `window.chrome.webview` object.
-        /// See SetWebMessageReceivedEventHandler for information on sending messages
-        /// from the HTML document in the webview to the host.
-        /// This message is sent asynchronously. If a navigation occurs before the
-        /// message is posted to the page, then the message will not be sent.
-        /// </summary>
-        /// <param name="json"></param>
-        public void PostWebMessageAsJson(string json)
-        {
-            if (_webView2WebView != null)
-            {
-                _webView2WebView.PostWebMessageAsJson(json);
-            }
-        }
-
-        public void CallDevToolsProtocolMethod(string methodName, string parametersAsJson)
-        {
-            _webView2WebView.CallDevToolsProtocolMethod(methodName, parametersAsJson, null);
-        }
-
-        public void CallDevToolsProtocolMethod(string methodName, string parametersAsJson, Action<CallDevToolsProtocolMethodCompletedEventArgs> callback)
-        {
-            _webView2WebView.CallDevToolsProtocolMethod(methodName, parametersAsJson, callback);
-        }
-
-        public void StartListeningDevToolsProtocolEvent(string eventName)
-        {
-            if (_devToolsProtocolEventTokenDictionary.ContainsKey(eventName))
-            {
-                return;
-            }
-
-            long token = _webView2WebView.RegisterDevToolsProtocolEventReceived(eventName, OnDevToolsProtocolEventReceived);
-            _devToolsProtocolEventTokenDictionary.Add(eventName, token);
-        }
-
-        public void StopListeningDevToolsProtocolEvent(string eventName)
-        {
-            if (!_devToolsProtocolEventTokenDictionary.ContainsKey(eventName))
-            {
-                return;
-            }
-            long token = _devToolsProtocolEventTokenDictionary[eventName];
-            _devToolsProtocolEventTokenDictionary.Remove(eventName);
-            _webView2WebView.UnregisterDevToolsProtocolEventReceived(token);
-        }
-
-        public void ExecuteScript(string javaScript, Action<ExecuteScriptCompletedEventArgs> callback)
-        {
-            if (_webView2WebView == null)
-                return;
-            _webView2WebView.ExecuteScript(javaScript, callback);
-        }
-
-        public void MoveFocus(WEBVIEW2_MOVE_FOCUS_REASON reason)
-        {
-            if (_webView2WebView == null)
-                return;
-            _webView2WebView.MoveFocus(reason);
-        }
-
-
-        protected void InternalNavigate(string url)
-        {
-            _internalUrl = url;
-            if (_webView2WebView == null) return;
-            _webView2WebView.Navigate(url);
-        }
-
-        #region Control Properties
-        [Browsable(false), 
+        [Browsable(false),
          EditorBrowsable(EditorBrowsableState.Never),
          DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public new Padding Padding
+        {
+            get { return base.Padding; }
+            set { base.Padding = value; }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Localizable(false)]
+        public override RightToLeft RightToLeft
+        {
+            get
+            {
+                return RightToLeft.No;
+            }
+            set
+            {
+                throw new NotSupportedException(Resources.WebView2RightToLeftNotSupported);
+            }
+        }
+
+        [
+            Browsable(false),
+            EditorBrowsable(EditorBrowsableState.Never),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            Bindable(false)
+        ]
+        public override string Text
+        {
+            get
+            {
+                return "";
+            }
+            set
+            {
+                throw new NotSupportedException(Resources.WebView2TextNotSupported);
+            }
+        }
+
         public new bool UseWaitCursor
         {
             get
@@ -360,97 +232,517 @@ namespace Russinsoft.WinForms
             }
             set
             {
-                throw new NotSupportedException();
+                throw new NotSupportedException(Resources.WebView2UseWaitCursorNotSupported);
             }
         }
 
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public bool CanGoBack
+        #endregion
+
+        #region Unavailable Events
+        //////////////////////////////////////
+        //
+        // Unavailable events
+        //
+
+        private string FormatEventMessage(string name)
         {
-            get
+            return string.Format(Resources.EventNotSupported, name);
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event EventHandler BackgroundImageLayoutChanged
+        {
+            add
             {
-                return _webView2WebView.CanGoBack;
+                throw new NotSupportedException(FormatEventMessage("BackgroundImageLayoutChanged"));
+            }
+            remove
+            {
             }
         }
 
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public bool CanGoForward
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event EventHandler Enter
         {
-            get
+            add
             {
-                return _webView2WebView.CanGoForward;
+                throw new NotSupportedException(FormatEventMessage("Enter"));
+            }
+            remove
+            {
             }
         }
 
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public string Source
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event EventHandler Leave
         {
-            get
+            add
             {
-                if (_webView2WebView != null)
-                {
-                    return _webView2WebView.Source;
-                }
-                return string.Empty;
+                throw new NotSupportedException(FormatEventMessage("Leave"));
+            }
+            remove
+            {
             }
         }
 
-        private bool _initialAreDevToolsEnabled = true;
-
-        public bool AreDevToolsEnabled
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event EventHandler MouseCaptureChanged
         {
-            get
+            add
             {
-                if (_webView2WebView == null)
-                    return _initialAreDevToolsEnabled;
-                return _webView2WebView.Settings.AreDevToolsEnabled;
+                throw new NotSupportedException(FormatEventMessage("MouseCaptureChanged"));
             }
-            set
+            remove
             {
-                if (_webView2WebView != null)
-                {
-                    _webView2WebView.Settings.AreDevToolsEnabled = value;
-                }
             }
         }
 
-        private bool _initialIsFullscreenAllowed = true;
-
-        public bool IsFullscreenAllowed
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event MouseEventHandler MouseClick
         {
-            get
+            add
             {
-                if (_webView2WebView == null)
-                    return _initialIsFullscreenAllowed;
-                return _webView2WebView.Settings.IsFullscreenAllowed;
+                throw new NotSupportedException(FormatEventMessage("MouseClick"));
             }
-            set
+            remove
             {
-                _initialIsFullscreenAllowed = value;
-                if (_webView2WebView != null)
-                {
-                    _webView2WebView.Settings.IsFullscreenAllowed = value;
-                }
             }
         }
 
-        private double _initialZoomFactor = 1.0;
-
-        public double ZoomFactor
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event MouseEventHandler MouseDoubleClick
         {
-            get
+            add
             {
-                if (_webView2WebView == null)
-                    return _initialZoomFactor;
-                return _webView2WebView.ZoomFactor;
+                throw new NotSupportedException(FormatEventMessage("MouseDoubleClick"));
             }
-            set
+            remove
             {
-                _initialZoomFactor = value;
-                if (_webView2WebView != null)
-                {
-                    _webView2WebView.ZoomFactor = value;
-                }
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event EventHandler BackColorChanged
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("BackColorChanged"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event EventHandler BackgroundImageChanged
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("BackgroundImageChanged"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event EventHandler BindingContextChanged
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("BindingContextChanged"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event EventHandler CursorChanged
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("CursorChanged"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event EventHandler EnabledChanged
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("EnabledChanged"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event EventHandler FontChanged
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("FontChanged"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event EventHandler ForeColorChanged
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("ForeColorChanged"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event EventHandler RightToLeftChanged
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("RightToLeftChanged"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event EventHandler TextChanged
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("TextChanged"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event EventHandler Click
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("Click"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event DragEventHandler DragDrop
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("DragDrop"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event DragEventHandler DragEnter
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("DragEnter"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event DragEventHandler DragOver
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("DragOver"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event EventHandler DragLeave
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("DragLeave"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event GiveFeedbackEventHandler GiveFeedback
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("GiveFeedback"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [SuppressMessage("Microsoft.Design", "CA1009:DeclareEventHandlersCorrectly")] //Everett
+        new public event HelpEventHandler HelpRequested
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("HelpRequested"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event PaintEventHandler Paint
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("Paint"));
+            }
+            remove
+            {
+            }
+        }
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event QueryContinueDragEventHandler QueryContinueDrag
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("QueryContinueDrag"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("QueryAccessibilityHelp"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event EventHandler DoubleClick
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("DoubleClick"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event EventHandler ImeModeChanged
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("ImeModeChanged"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event KeyEventHandler KeyDown
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("KeyDown"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event KeyPressEventHandler KeyPress
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("KeyPress"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event KeyEventHandler KeyUp
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("KeyUp"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event LayoutEventHandler Layout
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("Layout"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event MouseEventHandler MouseDown
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("MouseDown"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event EventHandler MouseEnter
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("MouseEnter"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event EventHandler MouseLeave
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("MouseLeave"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event EventHandler MouseHover
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("MouseHover"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event MouseEventHandler MouseMove
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("MouseMove"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event MouseEventHandler MouseUp
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("MouseUp"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event MouseEventHandler MouseWheel
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("MouseWheel"));
+            }
+            remove
+            {
+            }
+        }
+
+        [
+        Browsable(false),
+        EditorBrowsable(EditorBrowsableState.Never),
+        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+        ]
+        public new event EventHandler PaddingChanged
+        {
+            add
+            {
+                base.PaddingChanged += value;
+            }
+            remove
+            {
+                base.PaddingChanged -= value;
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event UICuesEventHandler ChangeUICues
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("ChangeUICues"));
+            }
+            remove
+            {
+            }
+        }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        new public event EventHandler StyleChanged
+        {
+            add
+            {
+                throw new NotSupportedException(FormatEventMessage("StyleChanged"));
+            }
+            remove
+            {
             }
         }
 

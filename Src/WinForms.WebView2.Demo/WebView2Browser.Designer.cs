@@ -1,4 +1,4 @@
-﻿using Russinsoft.WinForms;
+﻿using MtrDev.WinForms;
 
 namespace WinForms.WebView2.Demo
 {
@@ -32,8 +32,8 @@ namespace WinForms.WebView2.Demo
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WebView2Browser));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.controlsWebView2 = new Russinsoft.WinForms.WebView2Control();
-            this.webView2Control2 = new Russinsoft.WinForms.WebView2Control();
+            this.controlsWebView2 = new MtrDev.WinForms.WebView2Control();
+            this.webView2Control2 = new MtrDev.WinForms.WebView2Control();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -64,13 +64,11 @@ namespace WinForms.WebView2.Demo
             this.controlsWebView2.Name = "controlsWebView2";
             this.controlsWebView2.Size = new System.Drawing.Size(1067, 87);
             this.controlsWebView2.TabIndex = 0;
-            this.controlsWebView2.Text = "webView2Control1";
-            this.controlsWebView2.ZoomFactor = 1D;
-            this.controlsWebView2.BeforeEnvironmentCreated += new System.EventHandler<Russinsoft.WinForms.BeforeEnvironmentCreatedEventArgs>(this.controlsWebView2_BeforeEnvironmentCreated);
-            this.controlsWebView2.EnvironmentCreated += new System.EventHandler<Russinsoft.WinForms.EnvironmentCreatedEventArgs>(this.controlsWebView2_EnvironmentCreated);
+            this.controlsWebView2.BeforeEnvironmentCreated += new System.EventHandler<MtrDev.WinForms.BeforeEnvironmentCreatedEventArgs>(this.controlsWebView2_BeforeEnvironmentCreated);
+            this.controlsWebView2.EnvironmentCreated += new System.EventHandler<MtrDev.WinForms.EnvironmentCreatedEventArgs>(this.controlsWebView2_EnvironmentCreated);
             this.controlsWebView2.BrowserCreated += new System.EventHandler<System.EventArgs>(this.controlsWebView2_BrowserCreated);
-            this.controlsWebView2.ZoomFactorChanged += new System.EventHandler<Russinsoft.WinForms.ZoomFactorCompletedEventArgs>(this.controlsWebView2_ZoomFactorChanged);
-            this.controlsWebView2.WebMessageRecieved += new System.EventHandler<Russinsoft.WinForms.WebMessageReceivedEventArgs>(this.controlsWebView2_WebMessageRecieved);
+            this.controlsWebView2.ZoomFactorChanged += new System.EventHandler<MtrDev.WinForms.ZoomFactorCompletedEventArgs>(this.controlsWebView2_ZoomFactorChanged);
+            this.controlsWebView2.WebMessageRecieved += new System.EventHandler<MtrDev.WinForms.WebMessageReceivedEventArgs>(this.controlsWebView2_WebMessageRecieved);
             // 
             // webView2Control2
             // 
@@ -83,11 +81,9 @@ namespace WinForms.WebView2.Demo
             this.webView2Control2.Name = "webView2Control2";
             this.webView2Control2.Size = new System.Drawing.Size(1059, 459);
             this.webView2Control2.TabIndex = 1;
-            this.webView2Control2.Text = "webView2Control2";
             this.webView2Control2.Visible = false;
-            this.webView2Control2.ZoomFactor = 1D;
-            this.webView2Control2.BeforeEnvironmentCreated += new System.EventHandler<Russinsoft.WinForms.BeforeEnvironmentCreatedEventArgs>(this.webView2Control2_BeforeEnvironmentCreated);
-            this.webView2Control2.EnvironmentCreated += new System.EventHandler<Russinsoft.WinForms.EnvironmentCreatedEventArgs>(this.webView2Control2_EnvironmentCreated);
+            this.webView2Control2.BeforeEnvironmentCreated += new System.EventHandler<MtrDev.WinForms.BeforeEnvironmentCreatedEventArgs>(this.webView2Control2_BeforeEnvironmentCreated);
+            this.webView2Control2.EnvironmentCreated += new System.EventHandler<MtrDev.WinForms.EnvironmentCreatedEventArgs>(this.webView2Control2_EnvironmentCreated);
             // 
             // WebView2Browser
             // 

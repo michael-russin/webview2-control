@@ -117,4 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BackgroundImageLayoutChanged" xml:space="preserve">
+    <value>Event BackgroundImageLayoutChanged not supported</value>
+  </data>
+  <data name="EventNotSupported" xml:space="preserve">
+    <value>Event {0} is not supported</value>
+  </data>
+  <data name="WebView2AllowDropNotSupport" xml:space="preserve">
+    <value>Drop not supported</value>
+  </data>
+  <data name="WebView2BackgroundImageLayoutNotSupported" xml:space="preserve">
+    <value>Background image layout not supported</value>
+  </data>
+  <data name="WebView2BackgroundImageNotSupported" xml:space="preserve">
+    <value>Background image not supported</value>
+  </data>
+  <data name="WebView2CursorNotSupported" xml:space="preserve">
+    <value>Cursor not supported</value>
+  </data>
+  <data name="WebView2EnabledNotSupported" xml:space="preserve">
+    <value>Enabled not supported</value>
+  </data>
+  <data name="WebView2RightToLeftNotSupported" xml:space="preserve">
+    <value>RightToLeft not supported</value>
+  </data>
+  <data name="WebView2TextNotSupported" xml:space="preserve">
+    <value>Text not supported</value>
+  </data>
+  <data name="WebView2UseWaitCursorNotSupported" xml:space="preserve">
+    <value>WaitCursor not supported</value>
+  </data>
 </root>

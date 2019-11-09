@@ -1,18 +1,43 @@
-﻿using System;
+﻿#region License
+// Copyright (c) 2019 Michael T. Russin
+//
+// Permission is hereby granted, free of charge, to any person
+// obtaining a copy of this software and associated documentation
+// files (the "Software"), to deal in the Software without
+// restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the
+// Software is furnished to do so, subject to the following
+// conditions:
+//
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+// OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+// WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+// OTHER DEALINGS IN THE SOFTWARE.
+#endregion
+
+using System;
 using System.Collections.Generic;
 using System.Drawing;
-using Russinsoft.WebView2.Interop;
-using Russinsoft.WinForms.Handlers;
+using MtrDev.WebView2.Interop;
+using MtrDev.WinForms.Handlers;
 
-namespace Russinsoft.WinForms
+namespace MtrDev.WinForms
 {
-    public class WebView2WebView : IWebView2WebView3
+    public class WebView2WebView 
     {
-        private IWebView2WebView3 _webview;
+        private IWebView2WebView4 _webview;
 
         internal WebView2WebView(IWebView2WebView webview)
         {
-            _webview = (IWebView2WebView3)webview;
+            _webview = (IWebView2WebView4)webview;
         }
 
         internal IWebView2WebView InternalWebView
@@ -585,9 +610,11 @@ namespace Russinsoft.WinForms
         }
 
 
+        /// <summary>
         /// The title for the current top level document.
         /// If the document has no explicit title or is otherwise empty, then the URI
         /// of the top level document is used.
+        /// </summary>
         public string DocumentTitle
         {
             get
@@ -597,226 +624,60 @@ namespace Russinsoft.WinForms
                 return documentTitle;
             }
         }
+        #endregion
 
-        public void add_NavigationStarting(IWebView2NavigationStartingEventHandler eventHandler, out EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
+        #region IWebView2WebView4
+        // HRESULT AddRemoteObject([in] LPCWSTR name, [in] VARIANT* object);
 
-        public void remove_NavigationStarting(EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
+        /// Remove the host object specified by the name so that it is no longer
+        /// accessible from JavaScript code in the WebView.
+        /// While new access attempts will be denied, if the object is already
+        /// obtained by JavaScript code in the WebView, the JavaScript code will
+        /// continue to have access to that object.
+        /// Calling this method for a name that is already removed or never added will
+        /// fail.
+        //HRESULT RemoveRemoteObject([in] LPCWSTR name);
 
-        public void add_DocumentStateChanged(IWebView2DocumentStateChangedEventHandler eventHandler, out EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void remove_DocumentStateChanged(EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void add_NavigationCompleted(IWebView2NavigationCompletedEventHandler eventHandler, out EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void remove_NavigationCompleted(EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void add_FrameNavigationStarting(IWebView2NavigationStartingEventHandler eventHandler, out EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void remove_FrameNavigationStarting(EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void add_MoveFocusRequested(IWebView2MoveFocusRequestedEventHandler eventHandler, out EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void remove_MoveFocusRequested(EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void add_GotFocus(IWebView2FocusChangedEventHandler eventHandler, out EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void remove_GotFocus(EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void add_LostFocus(IWebView2FocusChangedEventHandler eventHandler, out EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void remove_LostFocus(EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void add_WebResourceRequested(ref string urlFilter, ref WEBVIEW2_WEB_RESOURCE_CONTEXT resourceContextFilter, ulong filterLength, IWebView2WebResourceRequestedEventHandler eventHandler, out EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void remove_WebResourceRequested(EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void add_ScriptDialogOpening(IWebView2ScriptDialogOpeningEventHandler eventHandler, out EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void remove_ScriptDialogOpening(EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void add_ZoomFactorChanged(IWebView2ZoomFactorChangedEventHandler eventHandler, out EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void remove_ZoomFactorChanged(EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void add_PermissionRequested(IWebView2PermissionRequestedEventHandler eventHandler, out EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void remove_PermissionRequested(EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void add_ProcessFailed(IWebView2ProcessFailedEventHandler eventHandler, out EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void remove_ProcessFailed(EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IWebView2WebView3.AddScriptToExecuteOnDocumentCreated(string javaScript, IWebView2AddScriptToExecuteOnDocumentCreatedCompletedHandler handler)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ExecuteScript(string javaScript, IWebView2ExecuteScriptCompletedHandler handler)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IWebView2WebView3.CapturePreview(WEBVIEW2_CAPTURE_PREVIEW_IMAGE_FORMAT imageFormat, IStream imageStream, IWebView2CapturePreviewCompletedHandler handler)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void add_WebMessageReceived(IWebView2WebMessageReceivedEventHandler handler, out EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void remove_WebMessageReceived(EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void add_DevToolsProtocolEventReceived(string eventName, IWebView2DevToolsProtocolEventReceivedEventHandler handler, out EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void remove_DevToolsProtocolEventReceived(string eventName, EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void add_NewWindowRequested(IWebView2NewWindowRequestedEventHandler eventHandler, out EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void remove_NewWindowRequested(EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void add_DocumentTitleChanged(IWebView2DocumentTitleChangedEventHandler eventHandler, out EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void remove_DocumentTitleChanged(EventRegistrationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IWebView2WebView3.DocumentTitle(out string title)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void AddRemoteObject(string name, ref object @object)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveRemoteObject(string name)
-        {
-            throw new NotImplementedException();
-        }
-
+        /// Opens the DevTools window for the current document in the WebView.
+        /// Does nothing if called when the DevTools window is already open
         public void OpenDevToolsWindow()
         {
-            throw new NotImplementedException();
+            _webview.OpenDevToolsWindow();
         }
 
-        IWebView2Settings IWebView2WebView3.Settings => throw new NotImplementedException();
 
-        tagRECT IWebView2WebView3.Bounds { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+  /// Add an event handler for the AcceleratorKeyPressed event.
+  /// AcceleratorKeyPressed fires when an accelerator key or key combo is
+  /// pressed or released while the WebView is focused. A key is considered an
+  /// accelerator if either:
+  ///   1. Ctrl or Alt is currently being held, or
+  ///   2. the pressed key does not map to a character.
+  /// A few specific keys are never considered accelerators, such as Shift.
+  /// The Escape key is always considered an accelerator.
+  ///
+  /// Autorepeated key events caused by holding the key down will also fire this
+  /// event.  You can filter these out by checking the event args'
+  /// KeyEventLParam or PhysicalKeyStatus.
+  ///
+  /// In windowed mode, this event handler is called synchronously. Until you
+  /// call Handle() on the event args or the event handler returns, the browser
+  /// process will be blocked and outgoing cross-process COM calls will fail
+  /// with RPC_E_CANTCALLOUT_ININPUTSYNCCALL. All WebView2 API methods will
+  /// work, however.
+  ///
+  /// In windowless mode, the event handler is called asynchronously.  Further
+  /// input will not reach the browser until the event handler returns or
+  /// Handle() is called, but the browser process itself will not be blocked,
+  /// and outgoing COM calls will work normally.
+  ///
+  /// It is recommended to call Handle(TRUE) as early as you can know that you want
+  /// to handle the accelerator key.
+  ///
+  /// \snippet AppWindow.cpp AcceleratorKeyPressed
+  //  HRESULT add_AcceleratorKeyPressed([in] IWebView2AcceleratorKeyPressedEventHandler* eventHandler, [out] EventRegistrationToken* token);
 
-        void IWebView2WebView.AddScriptToExecuteOnDocumentCreated(string javaScript, IWebView2AddScriptToExecuteOnDocumentCreatedCompletedHandler handler)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IWebView2WebView.CapturePreview(WEBVIEW2_CAPTURE_PREVIEW_IMAGE_FORMAT imageFormat, IStream imageStream, IWebView2CapturePreviewCompletedHandler handler)
-        {
-            throw new NotImplementedException();
-        }
-
-        IWebView2Settings IWebView2WebView.Settings => throw new NotImplementedException();
-
-        tagRECT IWebView2WebView.Bounds { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        void IWebView2WebView.CallDevToolsProtocolMethod(string methodName, string parametersAsJson, IWebView2CallDevToolsProtocolMethodCompletedHandler handler)
-        {
-        }
-        void IWebView2WebView3.CallDevToolsProtocolMethod(string methodName, string parametersAsJson, IWebView2CallDevToolsProtocolMethodCompletedHandler handler)
-        {
-        }
+        /// Remove an event handler previously added with add_AcceleratorKeyPressed.
+  //      HRESULT remove_AcceleratorKeyPressed([in] EventRegistrationToken token);
         #endregion
     }
 }
