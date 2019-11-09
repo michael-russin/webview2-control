@@ -44,3 +44,25 @@
 |get_CanGoForward| CanGoForward property  |  |
 |GoBack| GoBack method  |  |
 |GoForward| GoForward method |  |
+
+### IWebView2WebView3
+
+|IWebView2WebView3 Native|WebVeiw2Control|Tested|
+|---|---|---|
+|Stop | Stop Method | |
+|add_NewWindowRequested|  | |
+|remove_NewWindowRequested|  | |
+|add_DocumentTitleChanged| DocumentTitleChanged event | |
+|remove_DocumentTitleChanged| DocumentTitleChanged event | |
+|get_DocumentTitle| DocumentTitle property | |
+
+
+### IWebView2WebView4
+
+|IWebView2WebView4 Native|WebVeiw2Control|Tested|
+|---|---|---|
+|AddRemoteObject| Stop() Method | |
+|RemoveRemoteObject|  | |
+|OpenDevToolsWindow| OpenDevToolsWindow method  | |
+|add_AcceleratorKeyPressed|  | |
+|remove_AcceleratorKeyPressed|  | |
