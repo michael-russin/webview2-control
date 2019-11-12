@@ -5,10 +5,10 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("WebView2Sharp.Demo.WinForms")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("WinForms.WebView2.Demo")]
+[assembly: AssemblyDescription("Demo for WinForms WebView2 Control")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("MtrDev")]
 [assembly: AssemblyProduct("WebView2Sharp.Demo.WinForms")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]

@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using MtrDev.WinForms;
+using MtrDev.WebView2.Wrapper;
 
 namespace WinForms.WebView2.Demo
 {
@@ -83,38 +84,8 @@ namespace WinForms.WebView2.Demo
 
         string GetFilePathAsURI(string fullPath)
         {
-            string fileURI;
             Uri uri = new Uri(fullPath);
-            //            DWORD uriFlags = Uri_CREATE_ALLOW_IMPLICIT_FILE_SCHEME;
-            //            HRESULT hr = CreateUri(fullPath.c_str(), uriFlags, 0, &uri);
-
             return uri.AbsoluteUri;
-
-            //if (SUCCEEDED(hr))
-            //{
-            //    wil::unique_bstr absoluteUri;
-            //    uri->GetAbsoluteUri(&absoluteUri);
-            //    fileURI = std::wstring(absoluteUri.get());
-            //}
-
-            //return fileURI;
-        }
-
-        private void InitUIWebViews()
-        {
-            // Get data directory for browser UI data
-            //string browserDataDirectory = GetAppDataDirectory("Browser Data");
-
-            //// Create WebView environment for browser UI. A separate data directory is
-            //// used to isolate the browser UI from web content requested by the user.
-            //WebView2Loader.CreateEnvironmentWithDetails(string.Empty, browserDataDirectory,
-            //    string.Empty, (environment) => {
-            //        // Environment is ready, create the WebView
-            //        //_uiEnvironment = environment.WebViewEnvironment;
-
-            //        CreateBrowserControlsWebView();
-            //        CreateBrowserOptionsWebView();
-            //    });
         }
 
         public void OnWebMessageRecieved(WebMessageReceivedEventArgs args)
@@ -159,20 +130,6 @@ namespace WinForms.WebView2.Demo
 
                             _tabDictionary.Add(tabId, newTab);
                         }
-                        else
-                        {
-//                            _tabDictionary[tabId].close();
-                        }
-                        //            std::map<size_t, std::unique_ptr<Tab>>::iterator it = m_tabs.find(id);
-                        //            if (it == m_tabs.end())
-                        //            {
-                        //                m_tabs.insert(std::pair<size_t, std::unique_ptr<Tab>>(id, std::move(newTab)));
-                        //            }
-                        //            else
-                        //            {
-                        //                m_tabs.at(id)->m_contentWebView->Close();
-                        //                it->second = std::move(newTab);
-                        //            }
                     }
                     break;
                 case Messages.MG_NAVIGATE:
@@ -201,10 +158,6 @@ namespace WinForms.WebView2.Demo
                         else
                         {
                             _tabDictionary[_activeTabId].Navigate(uri);
-
-                            // If this fails navigate to the search URL
-                            //string encodedSearchURI = (string)jsonObj.SelectToken("args['encodedSearchURI']");
-                            //_tabDictionary[_activeTabId].Navigate(encodedSearchURI);
                         }
                     }
                     break;
@@ -252,7 +205,6 @@ namespace WinForms.WebView2.Demo
                         _optionsWebView.Visible = true;
                         ResizeUIWebViews();
                         _optionsWebView.BringToFront();
-                        //_optionsWebView.MoveFocus(WEBVIEW2_MOVE_FOCUS_REASON.WEBVIEW2_MOVE_FOCUS_REASON_PROGRAMMATIC);
                         _optionsWebView.Focus();
                     }
                     break;
@@ -263,7 +215,6 @@ namespace WinForms.WebView2.Demo
                     break;
                 case Messages.MG_OPTION_SELECTED:
                     {
-                        //_tabDictionary[_activeTabId].MoveFocus(WEBVIEW2_MOVE_FOCUS_REASON.WEBVIEW2_MOVE_FOCUS_REASON_PROGRAMMATIC);
                         _tabDictionary[_activeTabId].Focus();
                     }
                     break;
@@ -280,14 +231,7 @@ namespace WinForms.WebView2.Demo
                         PostJsonToWebView(jsonObj, _tabDictionary[tabId]);
                     }
                     break;
-            //    default:
-            //        {
-            //            OutputDebugString(L"Unexpected message\n");
-            //        }
-            //        break;
             }
-
-            //return S_OK;
         }
 
         private void RemoveFields(JToken token, string[] fields)
@@ -311,41 +255,6 @@ namespace WinForms.WebView2.Demo
                 el.Remove();
             }
         }
-
-        private void CreateBrowserControlsWebView()
-        {
-            string controlsPath = GetFullPathFor("Content\\controls_ui\\default.html");
-            controlsWebView2.Navigate(controlsPath);
-
-            //_uiEnvironment.CreateWebView(panelControls.Handle, (createViewArgs) => {
-
-            //    int result = createViewArgs.Result;
-            //    WebView2WebView webView = createViewArgs.WebView;
-
-            //    if (result != 0)
-            //    {
-            //        return;
-            //    }
-
-            //    _controlsWebView = webView;
-
-            //    WebView2Settings settings = _controlsWebView.Settings;
-            //    settings.AreDevToolsEnabled = false;
-            //    settings.IsFullscreenAllowed = false;
-
-            //    _zoomEventToken = _controlsWebView.RegisterZoomFactorChanged((args) => {
-            //        _controlsWebView.ZoomFactor = 1.0;
-            //    });
-
-            //    _webMessageEventToken = _controlsWebView.RegisterWebMessageReceived(OnWebMessageRecieved);
-
-            //    ResizeUIWebViews();
-
-            //    string controlsPath = GetFullPathFor("Content\\controls_ui\\default.html");
-            //    _controlsWebView.Navigate(controlsPath);
-            //});
-        }
-
         private void CreateBrowserOptionsWebView()
         {
             _optionsWebView = new WebView2Control(_controlEnvironment);
@@ -363,50 +272,6 @@ namespace WinForms.WebView2.Demo
 
             string optionsPath = GetFullPathFor("Content\\controls_ui\\options.html");
             _optionsWebView.Navigate(optionsPath);
-
-            
-
-            //_uiEnvironment.CreateWebView(panelUI.Handle, (createViewArgs) =>
-            //{
-            //    int result = createViewArgs.Result;
-            //    WebView2WebView webview = createViewArgs.WebView;
-
-            //    if (result != 0)
-            //    {
-            //        return;
-            //    }
-
-            //    // WebView created
-            //    _optionsWebView = webview;
-
-            //    WebView2Settings settings = _controlsWebView.Settings;
-            //    settings.AreDevToolsEnabled = false;
-            //    settings.IsFullscreenAllowed = false;
-
-            //    _optionsZoomEventToken = _controlsWebView.RegisterZoomFactorChanged((args) =>
-            //    {
-            //        _controlsWebView.ZoomFactor = 1.0;
-            //    });
-
-            //    // Hide by default
-            //    _optionsWebView.IsVisible = false;
-            //    _optionsUIMessageBrokerToken = _optionsWebView.RegisterWebMessageReceived(OnWebMessageRecieved);
-
-            //    // Hide menu when focus is lost
-            //    _lostOptionsFocus = _optionsWebView.RegisterLostFocus((args) =>
-            //    {
-            //        JObject jObject = new JObject();
-            //        jObject.Add("message", JToken.FromObject(Messages.MG_OPTIONS_LOST_FOCUS));
-            //        jObject.Add("args", JToken.FromObject("{}"));
-
-            //        PostJsonToWebView(jObject, _controlsWebView);
-            //    });
-
-            //    ResizeUIWebViews();
-
-            //    string optionsPath = GetFullPathFor("Content\\controls_ui\\options.html");
-            //    _optionsWebView.Navigate(optionsPath);
-            //});
         }
 
         private void ResizeUIWebViews()
@@ -416,33 +281,10 @@ namespace WinForms.WebView2.Demo
                 int dpiDropdownWidth = (int)GetDPIAwareBound(OptionsDropdownWidth);
                 int dpiBarHeight = (int)GetDPIAwareBound(UIBarHeight);
                 int dpiDropdownHeight = (int)GetDPIAwareBound(OptionsDropdownHeight);
-                int x = (int)Bounds.Right - dpiDropdownWidth;
-
-                Rectangle bounds = new Rectangle(new Point(x, dpiBarHeight),
-                    new Size(dpiDropdownWidth, dpiDropdownHeight));
-            //            bounds.top = GetDPIAwareBound(c_uiBarHeight);
-            //            bounds.Height = bounds.top + GetDPIAwareBound(c_optionsDropdownHeight);
-            //            bounds.left = bounds.right - GetDPIAwareBound(c_optionsDropdownWidth);
+                int x = Bounds.Width - dpiDropdownWidth;
+                Rectangle bounds = new Rectangle(x, dpiBarHeight, dpiDropdownWidth, dpiDropdownHeight);
                 _optionsWebView.Bounds = bounds;
             }
-
-
-            //if (_controlsWebView != null)
-            //{
-            //    _controlsWebView.Bounds = new Rectangle(new Point(0, 0), panelControls.Size);
-            //}
-
-            //if (_optionsWebView != null)
-            //{
-            //    _optionsWebView.Bounds = new Rectangle(new Point(0, 0), panel.Size);
-            //    RECT bounds;
-            //    GetClientRect(m_hWnd, &bounds);
-            //    bounds.top = GetDPIAwareBound(c_uiBarHeight);
-            //    bounds.bottom = bounds.top + GetDPIAwareBound(c_optionsDropdownHeight);
-            //    bounds.left = bounds.right - GetDPIAwareBound(c_optionsDropdownWidth);
-
-            //    RETURN_IF_FAILED(m_optionsWebView->put_Bounds(bounds));
-            //}
         }
 
         private void PostJsonToWebView(JObject jObjectj, WebView2Control webview)
@@ -528,14 +370,11 @@ namespace WinForms.WebView2.Demo
 
             if (_tabDictionary.ContainsKey(tabId))
             {
-                //                RETURN_IF_FAILED(m_tabs.at(tabId)->ResizeWebView());
-                //                RETURN_IF_FAILED(m_tabs.at(tabId)->m_contentWebView->put_IsVisible(TRUE));
                 _tabDictionary[tabId].Visible = true;
                 _activeTabId = tabId;
                 if (previousActiveTab != INVALID_TAB_ID && previousActiveTab != _activeTabId)
                 {
                     _tabDictionary[previousActiveTab].Visible = false;
-                    //m_tabs.at(previousActiveTab)->m_contentWebView->put_IsVisible(FALSE));
                 }
 
             }

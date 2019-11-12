@@ -1,4 +1,5 @@
-﻿using MtrDev.WinForms;
+﻿using MtrDev.WebView2.Wrapper;
+using MtrDev.WinForms;
 using System;
 
 namespace WinForms.WebView2.Demo

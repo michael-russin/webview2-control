@@ -23,6 +23,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 using MtrDev.WebView2.Interop;
+using MtrDev.WebView2.Wrapper;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -1000,7 +1001,7 @@ namespace MtrDev.WinForms
             _handlerTokenDictionary.Add(HandlerType.LostFocus, _webView2WebView.RegisterLostFocus(OnBrowserLostFocus));
             _handlerTokenDictionary.Add(HandlerType.FrameNavigationStarting, _webView2WebView.RegisterFrameNavigationStarting(OnFrameNavigationStarting));
             _handlerTokenDictionary.Add(HandlerType.MoveFocusRequested, _webView2WebView.RegisterMoveFocusRequested(OnMoveFocusRequested));
-            _handlerTokenDictionary.Add(HandlerType.GotFocus, _webView2WebView.RegisterGotFocusdEvent(OnBrowserGotFocus));
+            _handlerTokenDictionary.Add(HandlerType.GotFocus, _webView2WebView.RegisterGotFocus(OnBrowserGotFocus));
             _handlerTokenDictionary.Add(HandlerType.ScriptDialogOpening, _webView2WebView.RegisterScriptDialogOpening(OnScriptDialogOpening));
             _handlerTokenDictionary.Add(HandlerType.PermissionRequested, _webView2WebView.RegisterPermissionRequested(OnPermissionRequested));
             _handlerTokenDictionary.Add(HandlerType.ProcessFailed, _webView2WebView.RegisterProcessFailed(OnProcessFailed));
@@ -1024,7 +1025,7 @@ namespace MtrDev.WinForms
             _webView2WebView.UnregisterLostFocus(_handlerTokenDictionary[HandlerType.LostFocus]);
             _webView2WebView.UnregisterFrameNavigationStarting(_handlerTokenDictionary[HandlerType.FrameNavigationStarting]);
             _webView2WebView.UnregisterMoveFocusRequested(_handlerTokenDictionary[HandlerType.MoveFocusRequested]);
-            _webView2WebView.UnregisterGotFocusEvent(_handlerTokenDictionary[HandlerType.GotFocus]);
+            _webView2WebView.UnregisterGotFocus(_handlerTokenDictionary[HandlerType.GotFocus]);
             _webView2WebView.UnregisterWebResourceRequested(_handlerTokenDictionary[HandlerType.WebResourceRequested]);
             _webView2WebView.UnregisterScriptDialogOpening(_handlerTokenDictionary[HandlerType.ScriptDialogOpening]);
             _webView2WebView.UnregisterPermissionRequested(_handlerTokenDictionary[HandlerType.PermissionRequested]);

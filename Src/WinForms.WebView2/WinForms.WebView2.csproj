@@ -54,68 +54,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="WebView2Deferral.cs" />
-    <Compile Include="EventArgs\AddScriptToExecuteOnDocumentCreatedCompletedEventArgs.cs" />
     <Compile Include="EventArgs\BeforeEnvironmentCreatedEventArgs.cs" />
-    <Compile Include="EventArgs\CallDevToolsProtocolMethodCompletedEventArgs.cs" />
-    <Compile Include="EventArgs\CreateWebViewCompletedEventArgs.cs" />
-    <Compile Include="EventArgs\DevToolsProtocolEventReceivedEventArgs.cs" />
-    <Compile Include="EventArgs\DocumentTitleChangedEventArgs.cs" />
-    <Compile Include="EventArgs\EnvironmentCreatedEventArgs.cs" />
-    <Compile Include="EventArgs\ExecuteScriptCompletedEventArgs.cs" />
-    <Compile Include="EventArgs\DocumentStateChangedEventArgs.cs" />
-    <Compile Include="EventArgs\FocusChangedEventEventArgs.cs" />
-    <Compile Include="EventArgs\MoveFocusRequestedEventArgs.cs" />
-    <Compile Include="EventArgs\NavigationStartingEventArgs.cs" />
-    <Compile Include="EventArgs\PermissionRequestedEventArgs.cs" />
-    <Compile Include="EventArgs\ProcessFailedEventArgs.cs" />
-    <Compile Include="EventArgs\ScriptDialogOpeningEventArgs .cs" />
-    <Compile Include="EventArgs\WebResourceRequestedEventArgs.cs" />
-    <Compile Include="EventArgs\NewWindowRequestedEventArgs.cs" />
-    <Compile Include="Handlers\CallDevToolsProtocolMethodCompletedHandler.cs" />
-    <Compile Include="Handlers\CreateWebViewCompletedHandler.cs" />
-    <Compile Include="Handlers\DevToolProtocol.cs" />
-    <Compile Include="Handlers\DevToolsProtocolEventReceivedEventHandler.cs" />
-    <Compile Include="Handlers\DocumentTitleChangedEventHandler.cs" />
-    <Compile Include="Handlers\EnvironmentCompletedHandler.cs" />
-    <Compile Include="Handlers\HandlerBase.cs" />
-    <Compile Include="Handlers\ExecuteScriptCompletedHandler.cs" />
-    <Compile Include="Handlers\NewWindowRequestedEventHandler.cs" />
-    <Compile Include="Handlers\PermissionRequestedEventHandler.cs" />
-    <Compile Include="Handlers\ProcessFailedEventHandler.cs" />
-    <Compile Include="Handlers\ScriptDialogOpeningEventHandler.cs" />
-    <Compile Include="Handlers\AddScriptToExecuteOnDocumentCreatedCompletedHandler.cs" />
-    <Compile Include="Handlers\CapturePreviewCompletedHandler .cs" />
-    <Compile Include="Handlers\DocumentStateChangedEventHandler .cs" />
-    <Compile Include="Handlers\FocusChangedEventHandler.cs" />
-    <Compile Include="EventArgs\NavigationCompletedEventArgs.cs" />
-    <Compile Include="Handlers\MoveFocusRequestedEventHandler.cs" />
-    <Compile Include="Handlers\NavigationCompletedEventHandler.cs" />
-    <Compile Include="EventArgs\WebMessageReceivedEventArgs.cs" />
-    <Compile Include="Handlers\NavigationStartingEventHandler.cs" />
-    <Compile Include="Handlers\WebMessageReceivedEventHandler.cs" />
-    <Compile Include="Handlers\WebResourceRequestedEventHandler.cs" />
-    <Compile Include="Handlers\ZoomFactorChangedEventHandler.cs" />
-    <Compile Include="EventArgs\ZoomFactorCompletedEventArgs.cs" />
-    <Compile Include="ExternDll.cs" />
     <Compile Include="HandlerType.cs" />
-    <Compile Include="WebView2HttpRequestHeaderCollection.cs" />
-    <Compile Include="WebView2HttpResponseHeaderCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SafeNativeMethods.cs" />
-    <Compile Include="TokenDictionary.cs" />
-    <Compile Include="WebView2WebResourceRequest.cs" />
-    <Compile Include="WebView2WebResourceResponse.cs" />
     <Compile Include="WebView2Control.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="WebView2ControlBase.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="WebView2Settings.cs" />
-    <Compile Include="WebView2WebView.cs" />
-    <Compile Include="WebView2Loader.cs" />
-    <Compile Include="WebView2Environment.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

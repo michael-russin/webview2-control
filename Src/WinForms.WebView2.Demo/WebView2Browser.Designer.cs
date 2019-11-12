@@ -1,4 +1,5 @@
 ﻿using MtrDev.WinForms;
+using MtrDev.WebView2.Wrapper;
 
 namespace WinForms.WebView2.Demo
 {
@@ -65,10 +66,10 @@ namespace WinForms.WebView2.Demo
             this.controlsWebView2.Size = new System.Drawing.Size(1067, 87);
             this.controlsWebView2.TabIndex = 0;
             this.controlsWebView2.BeforeEnvironmentCreated += new System.EventHandler<MtrDev.WinForms.BeforeEnvironmentCreatedEventArgs>(this.controlsWebView2_BeforeEnvironmentCreated);
-            this.controlsWebView2.EnvironmentCreated += new System.EventHandler<MtrDev.WinForms.EnvironmentCreatedEventArgs>(this.controlsWebView2_EnvironmentCreated);
+            this.controlsWebView2.EnvironmentCreated += new System.EventHandler<MtrDev.WebView2.Wrapper.EnvironmentCreatedEventArgs>(this.controlsWebView2_EnvironmentCreated);
             this.controlsWebView2.BrowserCreated += new System.EventHandler<System.EventArgs>(this.controlsWebView2_BrowserCreated);
-            this.controlsWebView2.ZoomFactorChanged += new System.EventHandler<MtrDev.WinForms.ZoomFactorCompletedEventArgs>(this.controlsWebView2_ZoomFactorChanged);
-            this.controlsWebView2.WebMessageRecieved += new System.EventHandler<MtrDev.WinForms.WebMessageReceivedEventArgs>(this.controlsWebView2_WebMessageRecieved);
+            this.controlsWebView2.ZoomFactorChanged += new System.EventHandler<MtrDev.WebView2.Wrapper.ZoomFactorCompletedEventArgs>(this.controlsWebView2_ZoomFactorChanged);
+            this.controlsWebView2.WebMessageRecieved += new System.EventHandler<MtrDev.WebView2.Wrapper.WebMessageReceivedEventArgs>(this.controlsWebView2_WebMessageRecieved);
             // 
             // webView2Control2
             // 
@@ -83,7 +84,7 @@ namespace WinForms.WebView2.Demo
             this.webView2Control2.TabIndex = 1;
             this.webView2Control2.Visible = false;
             this.webView2Control2.BeforeEnvironmentCreated += new System.EventHandler<MtrDev.WinForms.BeforeEnvironmentCreatedEventArgs>(this.webView2Control2_BeforeEnvironmentCreated);
-            this.webView2Control2.EnvironmentCreated += new System.EventHandler<MtrDev.WinForms.EnvironmentCreatedEventArgs>(this.webView2Control2_EnvironmentCreated);
+            this.webView2Control2.EnvironmentCreated += new System.EventHandler<MtrDev.WebView2.Wrapper.EnvironmentCreatedEventArgs>(this.webView2Control2_EnvironmentCreated);
             // 
             // WebView2Browser
             // 
