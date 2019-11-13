@@ -1,68 +1,39 @@
+<img src="https://github.com/michael-russin/webview2-interop/blob/master/new-microsoft-edge-icon.png" width="96">
+
 # webview2-control
-.net controls for the Edge WebView2 
+Window Forms control for the Microsoft WebView2 web browser control.
 
-|WebView2 Native|WebVeiw2Control|Tested|
-|---|---|---|
-|get_Settings|properties expoesed on control   |   |
-|get_Source([out, retval] LPWSTR* uri)|Source property   |   |
-|Navigate([in] LPCWSTR uri)|Url property and Navigate method   |   |
-|MoveFocus([in] WEBVIEW2_MOVE_FOCUS_REASON reason)|  |  |
-|NavigateToString([in] LPCWSTR htmlContent)| NavigateToString method  |   |
-|add/remove NavigationStarting| NavigationStarting event  |  |
-|add/remove DocumentStateChanged| DocumentStateChanged event |  |
-|add/remove NavigationCompleted| NavigationCompleted completed |  |
-|add/remove FrameNavigationStarting|FrameNavigationStarting  |  |
-|add/remove MoveFocusRequested| MoveFocusRequested |  |
-|add/remove GotFocus| Control.GotFocus event |  |
-|add/remove LostFocus| Control.LostFocus  |  |
-|add/remove WebResourceRequested|  |  |
-|add/remove ScriptDialogOpening| ScriptDialogOpening event   |  |
-|add/remove ZoomFactorChanged| ZoomFactorChanged event  |  |
-|add/remove PermissionRequested| PermissionRequested event|  |
-|add/remove ProcessFailed| ProcessFailed |  |
-|AddScriptToExecuteOnDocumentCreated|  |  |
-|RemoveScriptToExecuteOnDocumentCreated|  |  |
-|ExecuteScript|  |  |
-|CapturePreview|  |  |
-|Reload|  |  |
-|get_Bounds| Control.Bounds property |  |
-|put_Bounds| Control.Bounds property |  |
-|get_ZoomFactor| ZoomFactor property  |  |
-|put_ZoomFactor|  ZoomFactor property |  |
-|get_IsVisible| Control.Visible  |  |
-|put_IsVisible| Control.Visible |  |
-|PostWebMessageAsJson| PostWebMessageAsJson |  |
-|PostWebMessageAsString| PostWebMessageAsString  |  |
-|add_WebMessageReceived|  |  |
-|remove_WebMessageReceived|  |  |
-|Close|  |  |
-|CallDevToolsProtocolMethod|  |  |
-|add_DevToolsProtocolEventReceived|  |  |
-|remove_DevToolsProtocolEventReceived|  |  |
-|get_BrowserProcessId|  |  |
-|get_CanGoBack| CanGoBack property |  |
-|get_CanGoForward| CanGoForward property  |  |
-|GoBack| GoBack method  |  |
-|GoForward| GoForward method |  |
+When Microsoft revealed their plans for a Chrome based Edge browser the first thing I thought was "I wonder if they are going to support an embedded web browser control"?  Well sure enough they released [WebView2](https://docs.microsoft.com/en-us/microsoft-edge/hosting/webview2) and I've been keeping an eye on the releases.  Recently I found a great [sample](https://github.com/MicrosoftEdge/WebView2Browser) written by [David Risney](https://github.com/david-risney) and I was inspired to take a shot at putting together a C# version. 
 
-### IWebView2WebView3
+This project contains a Windows Forms control implementation of the WebView2 C++ contorl .  It's built using the [interop project](https://github.com/michael-russin/webview2-interop) I wrote.  I didn't combine the inerop and window form control into one project since I felt the interop can later be used for a WPF version.   
 
-|IWebView2WebView3 Native|WebVeiw2Control|Tested|
-|---|---|---|
-|Stop | Stop Method | |
-|add_NewWindowRequested|  | |
-|remove_NewWindowRequested|  | |
-|add_DocumentTitleChanged| DocumentTitleChanged event | |
-|remove_DocumentTitleChanged| DocumentTitleChanged event | |
-|get_DocumentTitle| DocumentTitle property | |
+If you just want to run the browser project using nuget packages then you can downloaded it from [webview2-dotnetbrowser](https://github.com/michael-russin/webview2-dotnetbrowser) This project has the same demo but iwht a project reference.  
+
+## Installing / Getting started
+
+* Microsoft Edge (Chromium) installed on a supported OS.
+* Visual Stdio 2017 or 2019 with C# and desktop development set up
+
+## Features
+
+* Windows Forms WebView2 control
+* Browser demo project
+
+## Contributing
+
+If you'd like to contribute, please fork the repository and use a feature
+branch. Please let me know of any issues you run into.
+
+## Links
+- Project homepage: https://github.com/michael-russin/webview2-interop
+- Repository: https://github.com/michael-russin/webview2-interop
+- Issue tracker: https://github.com/michael-russin/webview2-interop/issues
+- Related projects:
+  - WebView2 Interop: https://github.com/michael-russin/webview2-interop
+  - David's awsome C++ sample: https://github.com/MicrosoftEdge/WebView2Browser
+  - WebView2 Documentation: https://docs.microsoft.com/en-us/microsoft-edge/hosting/webview2/reference-webview2
 
 
-### IWebView2WebView4
+## Licensing
 
-|IWebView2WebView4 Native|WebVeiw2Control|Tested|
-|---|---|---|
-|AddRemoteObject| Stop() Method | |
-|RemoveRemoteObject|  | |
-|OpenDevToolsWindow| OpenDevToolsWindow method  | |
-|add_AcceleratorKeyPressed|  | |
-|remove_AcceleratorKeyPressed|  | |
+The code in this project is licensed under MIT license.
