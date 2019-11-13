@@ -30,7 +30,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace MtrDev.WinForms
+namespace MtrDev.WebView2.Winforms
 {
     public class WebView2Control : WebView2ControlBase
     {
@@ -44,7 +44,7 @@ namespace MtrDev.WinForms
         private bool _initialIsScriptEnabled = true;
         private bool _initialIsWebMessageEnabled = true;
         private bool _initialIsStatusBarEnabled = true;
-        private bool _initialAreDefaultContextMenusEnabled = true;        
+        private bool _initialAreDefaultContextMenusEnabled = true;
 
         public WebView2Control()
         {
@@ -60,7 +60,7 @@ namespace MtrDev.WinForms
         [
             Bindable(true),
             DefaultValue(null)
-        ]       
+        ]
         public string Url
         {
             get
@@ -79,9 +79,9 @@ namespace MtrDev.WinForms
 
         /// <summary>
         /// Can navigate the webview to the previous page in the navigation history.
-        /// CanGoBack change value with the <see cref="WebView2Control.DocumentStateChanged"/> event.
+        /// CanGoBack change value with the <see cref="DocumentStateChanged"/> event.
         /// </summary>
-        [Browsable(false), 
+        [Browsable(false),
          DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool CanGoBack
         {
@@ -95,9 +95,9 @@ namespace MtrDev.WinForms
 
         /// <summary>
         /// Can navigate the webview to the next page in the navigation history.
-        /// CanGoForward change value with the <see cref="WebView2Control.DocumentStateChanged"/>  event.
+        /// CanGoForward change value with the <see cref="DocumentStateChanged"/>  event.
         /// </summary>
-        [Browsable(false), 
+        [Browsable(false),
          DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool CanGoForward
         {
@@ -111,12 +111,12 @@ namespace MtrDev.WinForms
 
         /// <summary>
         /// The URI of the current top level document. This value potentially
-        /// changes as a part of the <see cref="WebView2Control.DocumentStateChanged"/> event firing for some cases
+        /// changes as a part of the <see cref="DocumentStateChanged"/> event firing for some cases
         /// such as navigating to a different site or fragment navigations. It will
         /// remain the same for other types of navigations such as page reloads or
         /// history.pushState with the same URL as the current page.
         /// </summary>
-        [Browsable(false), 
+        [Browsable(false),
          DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string Source
         {
@@ -373,7 +373,7 @@ namespace MtrDev.WinForms
         /// <summary>
         /// Cause a navigation of the top level document to the specified URI. See
         /// the navigation events for more information. Note that this starts a
-        /// navigation and the corresponding <see cref="WebView2Control.NavigationStarting"/> event will fire
+        /// navigation and the corresponding <see cref="NavigationStarting"/> event will fire
         /// sometime after this Navigate call completes.
         /// </summary>
         /// <param name="url"></param>
@@ -729,7 +729,7 @@ namespace MtrDev.WinForms
         /// <summary>
         /// The event fires when a JavaScript dialog (alert, confirm, or prompt) will
         /// show for the webview. This event only fires if the
-        /// <see cref="WebView2Control.AreDefaultContextMenusEnabled"/> property is set to false.
+        /// <see cref="AreDefaultContextMenusEnabled"/> property is set to false.
         /// </summary>
         [Browsable(false)]
         public event EventHandler<ScriptDialogOpeningEventArgs> ScriptDialogOpening;
@@ -831,7 +831,7 @@ namespace MtrDev.WinForms
                 BrowserCreated(this, e);
             }
         }
-    
+
         protected virtual void OnNavigationStarting(NavigationStartingEventArgs e)
         {
             if (NavigationStarting != null)
@@ -889,7 +889,7 @@ namespace MtrDev.WinForms
 
         protected virtual void OnMoveFocusRequested(MoveFocusRequestedEventArgs e)
         {
-            if (MoveFocusRequested!= null)
+            if (MoveFocusRequested != null)
             {
                 MoveFocusRequested(this, e);
             }

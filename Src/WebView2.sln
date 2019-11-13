@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.757
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinForms.WebView2", "WinForms.WebView2\WinForms.WebView2.csproj", "{5CECFA1A-348F-49A1-B50D-EDCD5000245E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebView2.WinForms", "WebView2.WinForms\WebView2.WinForms.csproj", "{5CECFA1A-348F-49A1-B50D-EDCD5000245E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinForms.WebView2.Demo", "WinForms.WebView2.Demo\WinForms.WebView2.Demo.csproj", "{6B529903-1191-450F-BF2C-BD001ECC221F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebView2.WinForms.Demo", "WebView2.WinForms.Demo\WebView2.WinForms.Demo.csproj", "{6B529903-1191-450F-BF2C-BD001ECC221F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

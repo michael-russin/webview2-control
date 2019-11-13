@@ -1,8 +1,8 @@
-﻿using MtrDev.WebView2.Wrapper;
-using MtrDev.WinForms;
+﻿using MtrDev.WebView2.Winforms;
+using MtrDev.WebView2.Wrapper;
 using System;
 
-namespace WinForms.WebView2.Demo
+namespace MtrDev.WebView2.WinForms.Demo
 {
     public class Tab : WebView2Control
     {

@@ -1,7 +1,7 @@
-﻿using MtrDev.WinForms;
-using MtrDev.WebView2.Wrapper;
+﻿using MtrDev.WebView2.Wrapper;
+using MtrDev.WebView2.Winforms;
 
-namespace WinForms.WebView2.Demo
+namespace MtrDev.WebView2.WinForms.Demo
 {
     partial class WebView2Browser
     {
@@ -33,8 +33,8 @@ namespace WinForms.WebView2.Demo
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WebView2Browser));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.controlsWebView2 = new MtrDev.WinForms.WebView2Control();
-            this.webView2Control2 = new MtrDev.WinForms.WebView2Control();
+            this.controlsWebView2 = new WebView2Control();
+            this.webView2Control2 = new WebView2Control();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -65,7 +65,7 @@ namespace WinForms.WebView2.Demo
             this.controlsWebView2.Name = "controlsWebView2";
             this.controlsWebView2.Size = new System.Drawing.Size(1067, 87);
             this.controlsWebView2.TabIndex = 0;
-            this.controlsWebView2.BeforeEnvironmentCreated += new System.EventHandler<MtrDev.WinForms.BeforeEnvironmentCreatedEventArgs>(this.controlsWebView2_BeforeEnvironmentCreated);
+            this.controlsWebView2.BeforeEnvironmentCreated += new System.EventHandler<MtrDev.WebView2.Winforms.BeforeEnvironmentCreatedEventArgs>(this.controlsWebView2_BeforeEnvironmentCreated);
             this.controlsWebView2.EnvironmentCreated += new System.EventHandler<MtrDev.WebView2.Wrapper.EnvironmentCreatedEventArgs>(this.controlsWebView2_EnvironmentCreated);
             this.controlsWebView2.BrowserCreated += new System.EventHandler<System.EventArgs>(this.controlsWebView2_BrowserCreated);
             this.controlsWebView2.ZoomFactorChanged += new System.EventHandler<MtrDev.WebView2.Wrapper.ZoomFactorCompletedEventArgs>(this.controlsWebView2_ZoomFactorChanged);
@@ -83,7 +83,7 @@ namespace WinForms.WebView2.Demo
             this.webView2Control2.Size = new System.Drawing.Size(1059, 459);
             this.webView2Control2.TabIndex = 1;
             this.webView2Control2.Visible = false;
-            this.webView2Control2.BeforeEnvironmentCreated += new System.EventHandler<MtrDev.WinForms.BeforeEnvironmentCreatedEventArgs>(this.webView2Control2_BeforeEnvironmentCreated);
+            this.webView2Control2.BeforeEnvironmentCreated += new System.EventHandler<MtrDev.WebView2.Winforms.BeforeEnvironmentCreatedEventArgs>(this.webView2Control2_BeforeEnvironmentCreated);
             this.webView2Control2.EnvironmentCreated += new System.EventHandler<MtrDev.WebView2.Wrapper.EnvironmentCreatedEventArgs>(this.webView2Control2_EnvironmentCreated);
             // 
             // WebView2Browser

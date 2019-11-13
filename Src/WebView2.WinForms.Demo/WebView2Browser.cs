@@ -9,10 +9,10 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
-using MtrDev.WinForms;
 using MtrDev.WebView2.Wrapper;
+using MtrDev.WebView2.Winforms;
 
-namespace WinForms.WebView2.Demo
+namespace MtrDev.WebView2.WinForms.Demo
 {
     public partial class WebView2Browser : Form
     {

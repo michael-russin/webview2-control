@@ -24,7 +24,7 @@
 #endregion
 using System;
 
-namespace MtrDev.WinForms
+namespace MtrDev.WebView2.Winforms
 {
     /// <summary>
     /// 

@@ -6,7 +6,7 @@ using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WinForms.WebView2.Demo
+namespace MtrDev.WebView2.WinForms.Demo
 {
     [SuppressUnmanagedCodeSecurity]
     internal static class SafeNativeMethods

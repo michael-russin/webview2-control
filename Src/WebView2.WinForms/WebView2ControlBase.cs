@@ -31,7 +31,7 @@ using System.Windows.Forms;
 using MtrDev.WebView2.Interop;
 using MtrDev.WinForms.Properties;
 
-namespace MtrDev.WinForms
+namespace MtrDev.WebView2.Winforms
 {
     public class WebView2ControlBase : Control
     {

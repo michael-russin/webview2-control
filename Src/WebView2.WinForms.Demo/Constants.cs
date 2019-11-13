@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
-namespace WinForms.WebView2.Demo
+namespace MtrDev.WebView2.WinForms.Demo
 {
     public enum Messages : int
     {

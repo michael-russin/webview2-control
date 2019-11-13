@@ -7,8 +7,8 @@
     <ProjectGuid>{5CECFA1A-348F-49A1-B50D-EDCD5000245E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MtrDev.WinForms</RootNamespace>
-    <AssemblyName>MtrDev.WinForms.WebView2</AssemblyName>
+    <RootNamespace>MtrDev.WebView2.Winforms</RootNamespace>
+    <AssemblyName>MtrDev.WebView2.Winforms</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

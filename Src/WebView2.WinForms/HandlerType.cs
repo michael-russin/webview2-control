@@ -23,7 +23,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
-namespace MtrDev.WinForms
+namespace MtrDev.WebView2.Winforms
 {
     internal enum HandlerType
     {

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static WinForms.WebView2.Demo.SafeNativeMethods;
+using static MtrDev.WebView2.WinForms.Demo.SafeNativeMethods;
 
-namespace WinForms.WebView2.Demo
+namespace MtrDev.WebView2.WinForms.Demo
 {
     static class Program
     {

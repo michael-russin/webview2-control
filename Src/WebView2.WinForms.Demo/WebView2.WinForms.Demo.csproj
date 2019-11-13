@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{6B529903-1191-450F-BF2C-BD001ECC221F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>WinForms.WebView2.Demo</RootNamespace>
-    <AssemblyName>WinForms.WebView2.Demo</AssemblyName>
+    <RootNamespace>MtrDev.WebView2.WinForms.Demo</RootNamespace>
+    <AssemblyName>MtrDev.WebView2.WinForms.Demo</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -235,9 +235,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WinForms.WebView2\WinForms.WebView2.csproj">
+    <ProjectReference Include="..\WebView2.WinForms\WebView2.WinForms.csproj">
       <Project>{5cecfa1a-348f-49a1-b50d-edcd5000245e}</Project>
-      <Name>WinForms.WebView2</Name>
+      <Name>WebView2.WinForms</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
