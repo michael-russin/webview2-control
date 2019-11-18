@@ -68,5 +68,12 @@ namespace MtrDev.WebView2.WinForms.Demo
 
             base.OnBrowserCreated(e);
         }
+
+        protected override void OnNewWindowRequested(NewWindowRequestedEventArgs e)
+        {
+            PopupForm popupForm = new PopupForm(WebView2Environment, e);
+            popupForm.Show();
+            base.OnNewWindowRequested(e);
+        }
     }
 }

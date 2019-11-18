@@ -57,6 +57,20 @@ namespace MtrDev.WebView2.Winforms
 
 
         #region Public Properties
+        [Browsable(false),
+         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public WebView2Environment WebView2Environment
+        {
+            get { return _webViewEnvironment; }
+        }
+
+        [Browsable(false),
+         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public IWebView2WebView InnerWebView2WebView
+        {
+            get { return _webView2WebView.InnerWebView2WebView;  }
+        }
+
         [
             Bindable(true),
             DefaultValue(null)
@@ -361,7 +375,7 @@ namespace MtrDev.WebView2.Winforms
         {
             get
             {
-                if (_webView2WebView == null)
+                if (_webView2WebView != null)
                     return _webView2WebView.DocumentTitle;
                 return string.Empty;
             }
@@ -753,6 +767,13 @@ namespace MtrDev.WebView2.Winforms
         /// and may fire before or after the NavigationCompleted event.
         /// </summary>
         public event EventHandler<DocumentTitleChangedEventArgs> DocumentTitleChanged;
+
+        /// <summary>
+        /// Fires when content inside the WebView requested to open a new window,
+        /// such as through window.open. The app can pass a target
+        /// webview that will be considered the opened window.
+        /// </summary>
+        public event EventHandler<NewWindowRequestedEventArgs> NewWindowRequested;
         #endregion
 
         #region Public Overrides
@@ -800,7 +821,7 @@ namespace MtrDev.WebView2.Winforms
         {
             if (_webView2WebView != null)
             {
-                _webView2WebView.MoveFocus(WEBVIEW2_MOVE_FOCUS_REASON.WEBVIEW2_MOVE_FOCUS_REASON_NEXT);
+                _webView2WebView.MoveFocus(WEBVIEW2_MOVE_FOCUS_REASON.WEBVIEW2_MOVE_FOCUS_REASON_PROGRAMMATIC);
             }
             base.OnGotFocus(e);
         }
@@ -937,6 +958,13 @@ namespace MtrDev.WebView2.Winforms
             }
         }
 
+        protected virtual void OnNewWindowRequested(NewWindowRequestedEventArgs e)
+        {
+            if (NewWindowRequested != null)
+            {
+                NewWindowRequested(this, e);
+            }
+        }
         #endregion
 
         #region Private Methods
@@ -974,19 +1002,13 @@ namespace MtrDev.WebView2.Winforms
             IsFullscreenAllowed = _initialIsFullscreenAllowed;
             ZoomFactor = _initialZoomFactor;
 
-            _webView2WebView.Settings.IsWebMessageEnabled = false;
-            _webView2WebView.Settings.IsWebMessageEnabled = true;
-
             OnBrowserCreated(EventArgs.Empty);
 
             if (!string.IsNullOrEmpty(_internalUrl))
             {
-                // Schedule an async task to navigate to Bing
                 _webView2WebView.Navigate(_internalUrl);
             }
-
         }
-
 
         private IDictionary<HandlerType, long> _handlerTokenDictionary = new Dictionary<HandlerType, long>();
         private IDictionary<string, long> _devToolsProtocolEventTokenDictionary = new Dictionary<string, long>();
@@ -1006,6 +1028,7 @@ namespace MtrDev.WebView2.Winforms
             _handlerTokenDictionary.Add(HandlerType.PermissionRequested, _webView2WebView.RegisterPermissionRequested(OnPermissionRequested));
             _handlerTokenDictionary.Add(HandlerType.ProcessFailed, _webView2WebView.RegisterProcessFailed(OnProcessFailed));
             _handlerTokenDictionary.Add(HandlerType.TitleChanged, _webView2WebView.RegisterDocumentTitledChanged(OnDocumentTitleChanged));
+            _handlerTokenDictionary.Add(HandlerType.NewWindow, _webView2WebView.RegisterNewWindowRequested(OnNewWindowRequested));
             _handlersRegistered = true;
         }
 
@@ -1031,6 +1054,7 @@ namespace MtrDev.WebView2.Winforms
             _webView2WebView.UnregisterPermissionRequested(_handlerTokenDictionary[HandlerType.PermissionRequested]);
             _webView2WebView.UnregisterProcessFailed(_handlerTokenDictionary[HandlerType.ProcessFailed]);
             _webView2WebView.UnregisterDocumentTitledChanged(_handlerTokenDictionary[HandlerType.TitleChanged]);
+            _webView2WebView.UnregisterNewWindowRequested(_handlerTokenDictionary[HandlerType.NewWindow]);
         }
 
 
@@ -1041,6 +1065,7 @@ namespace MtrDev.WebView2.Winforms
 
         private void OnBrowserGotFocus(FocusChangedEventEventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine("OnBrowserGotFocus");
             base.OnGotFocus(EventArgs.Empty);
         }
 

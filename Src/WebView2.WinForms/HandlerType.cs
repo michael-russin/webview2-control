@@ -40,6 +40,7 @@ namespace MtrDev.WebView2.Winforms
         ScriptDialogOpening = 10,
         PermissionRequested = 11,
         ProcessFailed = 12,
-        TitleChanged = 13
+        TitleChanged = 13,
+        NewWindow = 14
     }
 }
