@@ -742,5 +742,33 @@ namespace MtrDev.WebView2.WinForms.Demo
             int dpiForWindow = (int)GetDpiForWindow(Handle);
             return (bound * dpiForWindow / DEFAULT_DPI);
         }
+
+        private void webView2Control2_AcceleratorKeyPressed(object sender, AcceleratorKeyPressedEventArgs e)
+        {
+            HandleAcceleratorKey(_activeTabId, e);
+        }
+
+        private void controlsWebView2_AcceleratorKeyPressed(object sender, AcceleratorKeyPressedEventArgs e)
+        {
+            HandleAcceleratorKey(_activeTabId, e);
+        }
+
+        public void HandleAcceleratorKey(int tabId, AcceleratorKeyPressedEventArgs e)
+        {
+            if (e.KeyEventType == Interop.WEBVIEW2_KEY_EVENT_TYPE.WEBVIEW2_KEY_EVENT_TYPE_KEY_DOWN)
+            {
+                if ((ModifierKeys & Keys.Control) == Keys.Control)
+                {
+                    if (e.VirtualKey == (uint)Keys.H)
+                    {
+                        string filePath = "Content\\content_ui\\";
+                        filePath = Path.Combine(filePath, "history");
+                        filePath += ".html";
+                        string fullPath = GetFullPathFor(filePath);
+                        _tabDictionary[_activeTabId].Navigate(fullPath);
+                    }
+                }
+            }
+        }
     }
 }

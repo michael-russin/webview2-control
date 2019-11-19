@@ -33,8 +33,7 @@ namespace MtrDev.WebView2.WinForms.Demo
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WebView2Browser));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.controlsWebView2 = new WebView2Control();
-            this.webView2Control2 = new WebView2Control();
+            this.controlsWebView2 = new MtrDev.WebView2.Winforms.WebView2Control();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -43,7 +42,6 @@ namespace MtrDev.WebView2.WinForms.Demo
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Controls.Add(this.controlsWebView2, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.webView2Control2, 0, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4);
@@ -56,10 +54,7 @@ namespace MtrDev.WebView2.WinForms.Demo
             // 
             // controlsWebView2
             // 
-            this.controlsWebView2.AreDevToolsEnabled = true;
-            this.controlsWebView2.BackColor = System.Drawing.SystemColors.Control;
             this.controlsWebView2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.controlsWebView2.IsFullscreenAllowed = true;
             this.controlsWebView2.Location = new System.Drawing.Point(0, 0);
             this.controlsWebView2.Margin = new System.Windows.Forms.Padding(0);
             this.controlsWebView2.Name = "controlsWebView2";
@@ -70,21 +65,7 @@ namespace MtrDev.WebView2.WinForms.Demo
             this.controlsWebView2.BrowserCreated += new System.EventHandler<System.EventArgs>(this.controlsWebView2_BrowserCreated);
             this.controlsWebView2.ZoomFactorChanged += new System.EventHandler<MtrDev.WebView2.Wrapper.ZoomFactorCompletedEventArgs>(this.controlsWebView2_ZoomFactorChanged);
             this.controlsWebView2.WebMessageRecieved += new System.EventHandler<MtrDev.WebView2.Wrapper.WebMessageReceivedEventArgs>(this.controlsWebView2_WebMessageRecieved);
-            // 
-            // webView2Control2
-            // 
-            this.webView2Control2.AreDevToolsEnabled = true;
-            this.webView2Control2.BackColor = System.Drawing.SystemColors.Control;
-            this.webView2Control2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.webView2Control2.IsFullscreenAllowed = true;
-            this.webView2Control2.Location = new System.Drawing.Point(4, 91);
-            this.webView2Control2.Margin = new System.Windows.Forms.Padding(4);
-            this.webView2Control2.Name = "webView2Control2";
-            this.webView2Control2.Size = new System.Drawing.Size(1059, 459);
-            this.webView2Control2.TabIndex = 1;
-            this.webView2Control2.Visible = false;
-            this.webView2Control2.BeforeEnvironmentCreated += new System.EventHandler<MtrDev.WebView2.Winforms.BeforeEnvironmentCreatedEventArgs>(this.webView2Control2_BeforeEnvironmentCreated);
-            this.webView2Control2.EnvironmentCreated += new System.EventHandler<MtrDev.WebView2.Wrapper.EnvironmentCreatedEventArgs>(this.webView2Control2_EnvironmentCreated);
+            this.controlsWebView2.AcceleratorKeyPressed += new System.EventHandler<MtrDev.WebView2.Wrapper.AcceleratorKeyPressedEventArgs>(this.controlsWebView2_AcceleratorKeyPressed);
             // 
             // WebView2Browser
             // 
@@ -105,6 +86,5 @@ namespace MtrDev.WebView2.WinForms.Demo
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private WebView2Control controlsWebView2;
-        private WebView2Control webView2Control2;
     }
 }

@@ -41,6 +41,7 @@ namespace MtrDev.WebView2.Winforms
         PermissionRequested = 11,
         ProcessFailed = 12,
         TitleChanged = 13,
-        NewWindow = 14
+        NewWindow = 14,
+        AcceleratorKeyPressed = 15
     }
 }

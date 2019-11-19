@@ -75,5 +75,11 @@ namespace MtrDev.WebView2.WinForms.Demo
             popupForm.Show();
             base.OnNewWindowRequested(e);
         }
+
+        protected override void OnAcceleratorKeyPressed(AcceleratorKeyPressedEventArgs e)
+        {
+            _parentBrowser.HandleAcceleratorKey(_tabId, e);
+            base.OnAcceleratorKeyPressed(e);
+        }
     }
 }

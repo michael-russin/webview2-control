@@ -774,6 +774,17 @@ namespace MtrDev.WebView2.Winforms
         /// webview that will be considered the opened window.
         /// </summary>
         public event EventHandler<NewWindowRequestedEventArgs> NewWindowRequested;
+
+        /// <summary>
+        /// AcceleratorKeyPressed fires when an accelerator key or key combo is
+        /// pressed or released while the WebView is focused. A key is considered an
+        /// accelerator if either:
+        ///   1. Ctrl or Alt is currently being held, or
+        ///   2. the pressed key does not map to a character.
+        /// A few specific keys are never considered accelerators, such as Shift.
+        /// The Escape key is always considered an accelerator.
+        /// </summary>
+        public event EventHandler<AcceleratorKeyPressedEventArgs> AcceleratorKeyPressed;
         #endregion
 
         #region Public Overrides
@@ -965,6 +976,15 @@ namespace MtrDev.WebView2.Winforms
                 NewWindowRequested(this, e);
             }
         }
+
+        protected virtual void OnAcceleratorKeyPressed(AcceleratorKeyPressedEventArgs e)
+        {
+            if (AcceleratorKeyPressed != null)
+            {
+                AcceleratorKeyPressed(this, e);
+            }
+        }
+
         #endregion
 
         #region Private Methods
@@ -1029,6 +1049,7 @@ namespace MtrDev.WebView2.Winforms
             _handlerTokenDictionary.Add(HandlerType.ProcessFailed, _webView2WebView.RegisterProcessFailed(OnProcessFailed));
             _handlerTokenDictionary.Add(HandlerType.TitleChanged, _webView2WebView.RegisterDocumentTitledChanged(OnDocumentTitleChanged));
             _handlerTokenDictionary.Add(HandlerType.NewWindow, _webView2WebView.RegisterNewWindowRequested(OnNewWindowRequested));
+            _handlerTokenDictionary.Add(HandlerType.AcceleratorKeyPressed, _webView2WebView.RegisterAcceleratorKeyPressed(OnAcceleratorKeyPressed));
             _handlersRegistered = true;
         }
 
@@ -1055,6 +1076,7 @@ namespace MtrDev.WebView2.Winforms
             _webView2WebView.UnregisterProcessFailed(_handlerTokenDictionary[HandlerType.ProcessFailed]);
             _webView2WebView.UnregisterDocumentTitledChanged(_handlerTokenDictionary[HandlerType.TitleChanged]);
             _webView2WebView.UnregisterNewWindowRequested(_handlerTokenDictionary[HandlerType.NewWindow]);
+            _webView2WebView.UnregisterAcceleratorKeyPressed(_handlerTokenDictionary[HandlerType.AcceleratorKeyPressed]);
         }
 
 
