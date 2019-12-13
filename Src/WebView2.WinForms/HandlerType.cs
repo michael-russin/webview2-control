@@ -42,6 +42,7 @@ namespace MtrDev.WebView2.Winforms
         ProcessFailed = 12,
         TitleChanged = 13,
         NewWindow = 14,
-        AcceleratorKeyPressed = 15
+        AcceleratorKeyPressed = 15,
+        FullScreenElement = 16
     }
 }

@@ -38,7 +38,6 @@ namespace MtrDev.WebView2.Winforms
         private WebView2WebView _webView2WebView;
         private string _internalUrl;
         private double _initialZoomFactor = 1.0;
-        private bool _initialIsFullscreenAllowed = true;
         private bool _initialAreDevToolsEnabled = true;
         private bool _initialAreDefaultScriptDialogsEnabled = true;
         private bool _initialIsScriptEnabled = true;
@@ -182,22 +181,15 @@ namespace MtrDev.WebView2.Winforms
             }
         }
 
-        [DefaultValue(true)]
-        public bool IsFullscreenAllowed
+        [Browsable(false),
+         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public bool ContainsFullScreenElement
         {
             get
             {
                 if (_webView2WebView == null)
-                    return _initialIsFullscreenAllowed;
-                return _webView2WebView.Settings.IsFullscreenAllowed;
-            }
-            set
-            {
-                _initialIsFullscreenAllowed = value;
-                if (_webView2WebView != null)
-                {
-                    _webView2WebView.Settings.IsFullscreenAllowed = value;
-                }
+                    return false;
+                return _webView2WebView.ContainsFullScreenElement;
             }
         }
 
@@ -785,6 +777,16 @@ namespace MtrDev.WebView2.Winforms
         /// The Escape key is always considered an accelerator.
         /// </summary>
         public event EventHandler<AcceleratorKeyPressedEventArgs> AcceleratorKeyPressed;
+
+        /// <summary>
+        /// Notifies when the ContainsFullScreenElement property changes. This means
+        /// that an HTML element inside the WebView is entering fullscreen to the size
+        /// of the WebView or leaving fullscreen.
+        /// This event is useful when, for example, a video element requests to go
+        /// fullscreen. The listener of ContainsFullScreenElementChanged can then
+        /// resize the WebView in response.
+        /// </summary>
+        public event EventHandler<ContainsFullScreenElementChangedEventArgs> ContainsFullScreenElementChanged;
         #endregion
 
         #region Public Overrides
@@ -985,6 +987,14 @@ namespace MtrDev.WebView2.Winforms
             }
         }
 
+        protected virtual void OnContainsFullScreenElementChanged(ContainsFullScreenElementChangedEventArgs e)
+        {
+            if (ContainsFullScreenElementChanged != null)
+            {
+                ContainsFullScreenElementChanged(this, e);
+            }
+        }
+
         #endregion
 
         #region Private Methods
@@ -1019,7 +1029,6 @@ namespace MtrDev.WebView2.Winforms
 
             // Set any properties that we have cached because the browser wasn't created yet
             AreDevToolsEnabled = _initialAreDevToolsEnabled;
-            IsFullscreenAllowed = _initialIsFullscreenAllowed;
             ZoomFactor = _initialZoomFactor;
 
             OnBrowserCreated(EventArgs.Empty);
@@ -1050,6 +1059,7 @@ namespace MtrDev.WebView2.Winforms
             _handlerTokenDictionary.Add(HandlerType.TitleChanged, _webView2WebView.RegisterDocumentTitledChanged(OnDocumentTitleChanged));
             _handlerTokenDictionary.Add(HandlerType.NewWindow, _webView2WebView.RegisterNewWindowRequested(OnNewWindowRequested));
             _handlerTokenDictionary.Add(HandlerType.AcceleratorKeyPressed, _webView2WebView.RegisterAcceleratorKeyPressed(OnAcceleratorKeyPressed));
+            _handlerTokenDictionary.Add(HandlerType.FullScreenElement, _webView2WebView.RegisterContainsFullScreenElementChanged(OnContainsFullScreenElementChanged));
             _handlersRegistered = true;
         }
 
@@ -1077,6 +1087,7 @@ namespace MtrDev.WebView2.Winforms
             _webView2WebView.UnregisterDocumentTitledChanged(_handlerTokenDictionary[HandlerType.TitleChanged]);
             _webView2WebView.UnregisterNewWindowRequested(_handlerTokenDictionary[HandlerType.NewWindow]);
             _webView2WebView.UnregisterAcceleratorKeyPressed(_handlerTokenDictionary[HandlerType.AcceleratorKeyPressed]);
+            _webView2WebView.UndegisterContainsFullScreenElementChanged(_handlerTokenDictionary[HandlerType.FullScreenElement]);
         }
 
 

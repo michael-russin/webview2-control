@@ -53,9 +53,10 @@ namespace MtrDev.WebView2.WinForms.Demo
 
         private void _childWebView_BrowserCreated(object sender, EventArgs e)
         {
-            // Browser is created so set the webview in the args and complete
-            // the deferral
-            _args.NewWindow = _childWebView.InnerWebView2WebView;
+
+            IWebView2WebView wv = null;
+            wv = (IWebView2WebView)_childWebView.InnerWebView2WebView;
+            _args.NewWindow = wv;
             _args.Handled = true;
             _deferral.Complete();
         }

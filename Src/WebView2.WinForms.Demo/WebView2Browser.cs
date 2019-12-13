@@ -260,7 +260,6 @@ namespace MtrDev.WebView2.WinForms.Demo
             _optionsWebView = new WebView2Control(_controlEnvironment);
             _optionsWebView.Visible = false;
             _optionsWebView.AreDevToolsEnabled = false;
-            _optionsWebView.IsFullscreenAllowed = false;
             _optionsWebView.ZoomFactorChanged += _optionsWebView_ZoomFactorChanged;
             _optionsWebView.WebMessageRecieved += _optionsWebView_WebMessageRecieved;
             _optionsWebView.LostFocus += _optionsWebView_LostFocus;
@@ -315,7 +314,6 @@ namespace MtrDev.WebView2.WinForms.Demo
             controlsWebView2.Navigate(controlsPath);
 
             controlsWebView2.AreDevToolsEnabled = true;
-            controlsWebView2.IsFullscreenAllowed = false;
 
             CreateBrowserOptionsWebView();
         }
