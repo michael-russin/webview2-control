@@ -34,8 +34,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MtrDev.WebView2.Interop, Version=0.8.355.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MtrDev.WebView2.Interop.0.8.355.1\lib\net45\MtrDev.WebView2.Interop.dll</HintPath>
+    <Reference Include="MtrDev.WebView2.Interop, Version=0.8.355.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MtrDev.WebView2.Interop.0.8.355.2\lib\net45\MtrDev.WebView2.Interop.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

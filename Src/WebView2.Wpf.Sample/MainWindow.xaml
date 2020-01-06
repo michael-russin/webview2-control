@@ -1,0 +1,157 @@
+﻿<Window x:Class="WebView2.Wpf.Sample.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WebView2.Wpf.Sample"
+        xmlns:controls="clr-namespace:MtrDev.WebView2.Wpf.Sample.Controls"
+        xmlns:cmds="clr-namespace:MtrDev.WebView2.Wpf.Sample"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.CommandBindings>
+        <CommandBinding Command="cmds:FileCommands.SaveScreenshot" Executed="FileCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:FileCommands.GetDocumentTitle" Executed="FileCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:FileCommands.VersionAfterCreation" Executed="FileCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:FileCommands.VersionBeforeCreation" Executed="FileCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:FileCommands.Exit" Executed="Exit_Executed"/>
+        <CommandBinding Command="cmds:ScriptCommands.InjectScript" Executed="ScriptCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:ScriptCommands.AddInitializeScript" Executed="ScriptCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:ScriptCommands.RemoveInitializeScript" Executed="ScriptCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:ScriptCommands.PostMessageString" Executed="ScriptCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:ScriptCommands.PostMessageJSON" Executed="ScriptCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:ScriptCommands.SubscribetoCDPevent" Executed="ScriptCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:ScriptCommands.CallCDPmethod" Executed="ScriptCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:ScriptCommands.AddCOMobject" Executed="ScriptCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:ScriptCommands.OpenDevToolsWindow" Executed="ScriptCommand_Executed" CanExecute="Command_CanExecute" />
+
+        <CommandBinding Command="cmds:WindowCommands.CloseWebView" Executed="WindowCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:WindowCommands.CreateWebView" Executed="WindowCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:WindowCommands.CreateNewWindow" Executed="WindowCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:WindowCommands.CreateNewThread" Executed="WindowCommand_Executed" CanExecute="Command_CanExecute" />
+
+        <CommandBinding Command="cmds:ProcessCommands.BrowserProcessInfo" Executed="ProcessCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:ProcessCommands.CrashBrowserProcess" Executed="ProcessCommand_Executed" CanExecute="Command_CanExecute" />
+
+        <CommandBinding Command="cmds:SettingsCommands.BlockedDomains" Executed="SettingsCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:SettingsCommands.SetUserAgent" Executed="SettingsCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:SettingsCommands.ToggleJavaScript" Executed="SettingsCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:SettingsCommands.ToggleWebMessaging" Executed="SettingsCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:SettingsCommands.ToggleFullscreenallowed" Executed="SettingsCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:SettingsCommands.ToggleStatusBarenabled" Executed="SettingsCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:SettingsCommands.ToggleDevToolsenabled" Executed="SettingsCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:SettingsCommands.ToggleBlockimages" Executed="SettingsCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:SettingsCommands.UseDefaultScriptDialogs" Executed="SettingsCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:SettingsCommands.UseCustomScriptDialogs" Executed="SettingsCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:SettingsCommands.UseDeferredScriptDialogs" Executed="SettingsCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:SettingsCommands.CompleteDeferredScriptDialog" Executed="SettingsCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:SettingsCommands.ToggleContextMenusEnabled" Executed="SettingsCommand_Executed" CanExecute="Command_CanExecute" />
+
+        <CommandBinding Command="cmds:ViewCommands.ToggleVisibility" Executed="ViewCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:ViewCommands.GetWebViewBounds" Executed="ViewCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:ViewCommands.Area25Percent" Executed="ViewCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:ViewCommands.Area50Percent" Executed="ViewCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:ViewCommands.Area75Percent" Executed="ViewCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:ViewCommands.Area100Percent" Executed="ViewCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:ViewCommands.ZoomHalf" Executed="ViewCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:ViewCommands.ZoomWhole" Executed="ViewCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:ViewCommands.ZoomTwice" Executed="ViewCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:ViewCommands.SetFocus" Executed="ViewCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:ViewCommands.TabIn" Executed="ViewCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:ViewCommands.ReverseTabIn" Executed="ViewCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:ViewCommands.ToggleTabHandling" Executed="ViewCommand_Executed" CanExecute="Command_CanExecute" />
+
+        <CommandBinding Command="cmds:ScenerioCommands.WebMessaging" Executed="ScenerioCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:ScenerioCommands.RemoteObjects" Executed="ScenerioCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:ScenerioCommands.EventMonitor" Executed="ScenerioCommand_Executed" CanExecute="Command_CanExecute" />
+
+        <CommandBinding Command="cmds:HelpCommands.About" Executed="HelpCommand_Executed" CanExecute="Command_CanExecute" />
+    </Window.CommandBindings>    
+    <Grid x:Name="mainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Menu x:Name="menuStrip1" IsMainMenu="True" Grid.Row="0">
+            <MenuItem Header="_File">
+                <MenuItem Command="cmds:FileCommands.SaveScreenshot"  />
+                <MenuItem Command="cmds:FileCommands.GetDocumentTitle"/>
+                <MenuItem Command="cmds:FileCommands.VersionAfterCreation" />
+                <MenuItem Command="cmds:FileCommands.VersionBeforeCreation" />
+                <MenuItem Command="cmds:FileCommands.Exit" />
+            </MenuItem>
+            <MenuItem Header="_Script">
+                <MenuItem Command="cmds:ScriptCommands.InjectScript" />
+                <MenuItem Command="cmds:ScriptCommands.AddInitializeScript" />
+                <MenuItem Command="cmds:ScriptCommands.RemoveInitializeScript" />
+                <Separator/>
+                <MenuItem Command="cmds:ScriptCommands.PostMessageString" />
+                <MenuItem Command="cmds:ScriptCommands.PostMessageJSON" />
+                <Separator/>
+                <MenuItem Command="cmds:ScriptCommands.SubscribetoCDPevent" />
+                <MenuItem Command="cmds:ScriptCommands.CallCDPmethod" />
+                <Separator/>
+                <MenuItem Command="cmds:ScriptCommands.AddCOMobject" />
+                <Separator/>
+                <MenuItem Command="cmds:ScriptCommands.OpenDevToolsWindow" />
+            </MenuItem>
+            <MenuItem Header="_Window">
+                <MenuItem Command="cmds:WindowCommands.CloseWebView" />
+                <MenuItem Command="cmds:WindowCommands.CreateWebView" />
+                <MenuItem Command="cmds:WindowCommands.CreateNewWindow" />
+                <MenuItem Command="cmds:WindowCommands.CreateNewThread" />
+            </MenuItem>
+            <MenuItem Header="_Process">
+                <MenuItem Command="cmds:ProcessCommands.BrowserProcessInfo"/>
+                <MenuItem Command="cmds:ProcessCommands.CrashBrowserProcess"/>
+            </MenuItem>
+            <MenuItem Header="S_etting">
+                <MenuItem Command="cmds:SettingsCommands.BlockedDomains"/>
+                <MenuItem Command="cmds:SettingsCommands.SetUserAgent"/>
+                <Separator />
+                <MenuItem Command="cmds:SettingsCommands.ToggleJavaScript" />
+                <MenuItem Command="cmds:SettingsCommands.ToggleWebMessaging"/>
+                <MenuItem Command="cmds:SettingsCommands.ToggleFullscreenallowed"/>
+                <MenuItem Command="cmds:SettingsCommands.ToggleStatusBarenabled"/>
+                <MenuItem Command="cmds:SettingsCommands.ToggleDevToolsenabled"/>
+                <MenuItem Command="cmds:SettingsCommands.ToggleBlockimages"/>
+                <MenuItem Header="JavaScript Dialogs">
+
+                    <MenuItem Command="cmds:SettingsCommands.UseDefaultScriptDialogs"/>
+                    <MenuItem Command="cmds:SettingsCommands.UseCustomScriptDialogs"/>
+                    <MenuItem Command="cmds:SettingsCommands.UseDeferredScriptDialogs"/>
+                    <MenuItem Command="cmds:SettingsCommands.CompleteDeferredScriptDialog"/>
+                </MenuItem>
+                <MenuItem Command="cmds:SettingsCommands.ToggleContextMenusEnabled"/>
+            </MenuItem>
+            <MenuItem Header="_View">
+                <MenuItem Command="cmds:ViewCommands.ToggleVisibility"/>
+                <MenuItem Command="cmds:ViewCommands.GetWebViewBounds"/>
+                <MenuItem Header="WebView Area">
+                    <MenuItem Command="cmds:ViewCommands.Area25Percent"/>
+                    <MenuItem Command="cmds:ViewCommands.Area50Percent"/>
+                    <MenuItem Command="cmds:ViewCommands.Area75Percent"/>
+                    <MenuItem Command="cmds:ViewCommands.Area100Percent"/>
+                </MenuItem>
+                <MenuItem Header="WebView Zoom">
+                    <MenuItem Command="cmds:ViewCommands.ZoomHalf"/>
+                    <MenuItem Command="cmds:ViewCommands.ZoomWhole"/>
+                    <MenuItem Command="cmds:ViewCommands.ZoomTwice"/>
+                </MenuItem>
+                <MenuItem Command="cmds:ViewCommands.SetFocus"/>
+                <MenuItem Command="cmds:ViewCommands.TabIn"/>
+                <MenuItem Command="cmds:ViewCommands.ReverseTabIn"/>
+                <MenuItem Command="cmds:ViewCommands.ToggleTabHandling"/>
+            </MenuItem>
+            <MenuItem Header="S_cenerio">
+                <MenuItem Command="cmds:ScenerioCommands.WebMessaging"/>
+                <MenuItem Command="cmds:ScenerioCommands.RemoteObjects"/>
+                <MenuItem Command="cmds:ScenerioCommands.EventMonitor"/>
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Command="cmds:HelpCommands.About" />
+            </MenuItem>
+        </Menu>
+        <controls:NavigationToolBar Grid.Row="1" x:Name="navigationToolBar"/>
+    </Grid>
+</Window>

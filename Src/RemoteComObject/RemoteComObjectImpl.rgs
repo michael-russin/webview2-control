@@ -1,0 +1,26 @@
+HKCR
+{
+	RemoteComObjectImpl.1 = s 'RemoteComObjectImpl Class'
+	{
+		CLSID = s '{3328FE46-65D4-431D-B356-E2FE2525C4B8}'
+	}
+	RemoteComObjectImpl = s 'RemoteComObjectImpl Class'
+	{		
+		CurVer = s 'RemoteComObjectImpl.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {3328FE46-65D4-431D-B356-E2FE2525C4B8} = s 'RemoteComObjectImpl Class'
+		{
+			ProgID = s 'RemoteComObjectImpl.1'
+			VersionIndependentProgID = s 'RemoteComObjectImpl'
+			ForceRemove Programmable
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			TypeLib = s '{82003E2C-6641-4643-A5D6-11B8BB7497B8}'
+			Version = s '1.0'
+		}
+	}
+}

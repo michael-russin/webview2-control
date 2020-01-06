@@ -5,12 +5,15 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Windows;
-using System.Windows.Forms;
+using System.Windows.Controls;
+using WinForms=System.Windows.Forms;
 using System.Windows.Interop;
+using System.Windows.Input;
+using System.IO;
 
 namespace MtrDev.WebView2.Wpf
 {
-    public class WebView2Control : HwndHost
+    public class WebView2Control : HwndHost 
     {
         BrowserParentWindow _webView2Host;
 
@@ -37,6 +40,43 @@ namespace MtrDev.WebView2.Wpf
         }
 
         #region Public Properties
+
+        /// <summary>
+        ///     The DependencyProperty for the TabIndex property.
+        ///     Flags:              Can be used in style rules
+        ///     Default Value:      1
+        /// </summary>
+        internal static readonly DependencyProperty TabIndexProperty
+            = Control.TabIndexProperty.AddOwner(typeof(WebView2Control));
+
+        /// <summary>
+        ///     TabIndex property change the order of Tab navigation between Controls.
+        ///     Control with lower TabIndex will get focus before the Control with higher index
+        /// </summary>
+        public int TabIndex
+        {
+            get { return (int)GetValue(TabIndexProperty); }
+            set { SetValue(TabIndexProperty, value); }
+        }
+
+        /// <summary>
+        ///     The DependencyProperty for the IsTabStop property.
+        /// </summary>
+        public static readonly DependencyProperty IsTabStopProperty
+                = KeyboardNavigation.IsTabStopProperty.AddOwner(typeof(WebView2Control));
+
+        /// <summary>
+        ///     Determine is the Control should be considered during Tab navigation.
+        ///     If IsTabStop is false then it is excluded from Tab navigation
+        /// </summary>
+        [Bindable(true), Category("Behavior")]
+        public bool IsTabStop
+        {
+            get { return (bool)GetValue(IsTabStopProperty); }
+            set { SetValue(IsTabStopProperty, value); }
+        }
+
+
         [Browsable(false),
          DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public WebView2Environment WebView2Environment
@@ -181,6 +221,18 @@ namespace MtrDev.WebView2.Wpf
             }
         }
 
+        [Browsable(false),
+         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public bool ContainsFullScreenElement
+        {
+            get
+            {
+                if (_webView2WebView == null)
+                    return false;
+                return _webView2WebView.ContainsFullScreenElement;
+            }
+        }
+
         [DefaultValue(true)]
         public bool IsWebMessageEnabled
         {
@@ -304,7 +356,7 @@ namespace MtrDev.WebView2.Wpf
         {
             get
             {
-                if (_webView2WebView == null)
+                if (_webView2WebView != null)
                     return _webView2WebView.BrowserProcessId;
                 return 0;
             }
@@ -587,6 +639,7 @@ namespace MtrDev.WebView2.Wpf
         {
             if (_webView2WebView == null)
                 return;
+            UnregisterHandlers();
             _webView2WebView.Close();
         }
 
@@ -623,6 +676,26 @@ namespace MtrDev.WebView2.Wpf
             if (_webView2WebView == null)
                 return;
             _webView2WebView.RemoveWebResourceRequestedFilter(uri, resourceContext);
+        }
+        public void CapturePreview(WEBVIEW2_CAPTURE_PREVIEW_IMAGE_FORMAT imageFormat, Stream imageStream, Action<CapturePreviewCompletedArgs> callback)
+        {
+            if (_webView2WebView == null)
+                return;
+            _webView2WebView.CapturePreview(imageFormat, imageStream, callback);
+        }
+
+        public void AddRemoteObject(string name, ref object remoteObject)
+        {
+            if (_webView2WebView == null)
+                return;
+            _webView2WebView.AddRemoteObject(name, ref remoteObject);
+        }
+
+        public void RemoveRemoteObject(string name)
+        {
+            if (_webView2WebView == null)
+                return;
+            _webView2WebView.RemoveRemoteObject(name);
         }
         #endregion
 
@@ -747,6 +820,42 @@ namespace MtrDev.WebView2.Wpf
         /// The Escape key is always considered an accelerator.
         /// </summary>
         public event EventHandler<AcceleratorKeyPressedEventArgs> AcceleratorKeyPressed;
+
+        /// <summary>
+        /// Notifies when the ContainsFullScreenElement property changes. This means
+        /// that an HTML element inside the WebView is entering fullscreen to the size
+        /// of the WebView or leaving fullscreen.
+        /// This event is useful when, for example, a video element requests to go
+        /// fullscreen. The listener of ContainsFullScreenElementChanged can then
+        /// resize the WebView in response.
+        /// </summary>
+        public event EventHandler<ContainsFullScreenElementChangedEventArgs> ContainsFullScreenElementChanged;
+
+        /// Fires when the WebView has performs any HTTP request.
+        /// Use urlFilter to pass in a list with size filterLength of urls to listen
+        /// for. Each url entry also supports wildcards: '*' matches zero or more
+        /// characters, and '?' matches exactly one character. For each urlFilter
+        /// entry, provide a matching resourceContextFilter representing the types of
+        /// resources for which WebResourceRequested should fire.
+        /// If filterLength is 0, the event will fire for all network requests.
+        /// The supported resource contexts are:
+        /// Document, Stylesheet, Image, Media, Font, Script, XHR, Fetch.
+        /// </summary>
+        public event EventHandler<WebResourceRequestedEventArgs> WebResourceRequested;
+
+        /// <summary>
+        /// See the
+        /// [DevTools Protocol Viewer](https://aka.ms/DevToolsProtocolDocs)
+        /// for a list and description of available events.
+        /// The eventName parameter is the full name of the event in the format
+        /// `{domain}.{event}`.
+        /// The handler's Invoke method will be called whenever the corresponding
+        /// DevToolsProtocol event fires. Invoke will be called with the
+        /// an event args object containing the CDP event's parameter object as a JSON
+        /// string.
+        ///
+        /// </summary>
+        public event EventHandler<DevToolsProtocolEventReceivedEventArgs> DevToolsProtocolEventReceived;
         #endregion
 
         #region Public Overrides
@@ -779,6 +888,27 @@ namespace MtrDev.WebView2.Wpf
                                                 (int)rcBoundingBox.Height);
             }
         }
+
+        protected override bool TabIntoCore(TraversalRequest request)
+        {
+            if (_webView2WebView != null && 
+                (request.FocusNavigationDirection == FocusNavigationDirection.First ||
+                 request.FocusNavigationDirection == FocusNavigationDirection.Last))
+            {
+                _webView2WebView.MoveFocus(WEBVIEW2_MOVE_FOCUS_REASON.WEBVIEW2_MOVE_FOCUS_REASON_PROGRAMMATIC);
+                return true;
+            }
+            UIElement keyboardFocus = Keyboard.FocusedElement as UIElement;
+
+            if (keyboardFocus != null)
+            {
+                keyboardFocus.MoveFocus(request);
+            }
+            return false;
+//            bool iWantTheTab =  base.TabIntoCore(request);
+//            return iWantTheTab;
+        }
+
         #endregion
 
         #region Protected Virtuals
@@ -851,8 +981,11 @@ namespace MtrDev.WebView2.Wpf
 
         protected virtual void OnDevToolsProtocolEventReceived(DevToolsProtocolEventReceivedEventArgs e)
         {
+            if (DevToolsProtocolEventReceived != null)
+            {
+                DevToolsProtocolEventReceived(this, e);
+            }
         }
-
 
         protected virtual void OnFrameNavigationStarting(NavigationStartingEventArgs e)
         {
@@ -873,7 +1006,10 @@ namespace MtrDev.WebView2.Wpf
 
         protected virtual void OnWebResourceRequested(WebResourceRequestedEventArgs e)
         {
-
+            if (WebResourceRequested != null)
+            {
+                WebResourceRequested(this, e);
+            }
         }
 
         protected virtual void OnScriptDialogOpening(ScriptDialogOpeningEventArgs e)
@@ -898,6 +1034,10 @@ namespace MtrDev.WebView2.Wpf
         /// <param name="e"></param>
         protected virtual void OnProcessFailed(ProcessFailedEventArgs e)
         {
+            // Communication with the underlying webView2 is broken
+            _webView2WebView = null;
+            _handlersRegistered = false;
+
             if (ProcessFailed != null)
             {
                 ProcessFailed(this, e);
@@ -928,6 +1068,13 @@ namespace MtrDev.WebView2.Wpf
             }
         }
 
+        protected virtual void OnContainsFullScreenElementChanged(ContainsFullScreenElementChangedEventArgs e)
+        {
+            if (ContainsFullScreenElementChanged != null)
+            {
+                ContainsFullScreenElementChanged(this, e);
+            }
+        }
         #endregion
 
         #region Private Methods
@@ -973,6 +1120,7 @@ namespace MtrDev.WebView2.Wpf
         private IDictionary<HandlerType, long> _handlerTokenDictionary = new Dictionary<HandlerType, long>();
         private IDictionary<string, long> _devToolsProtocolEventTokenDictionary = new Dictionary<string, long>();
         private bool _handlersRegistered = false;
+
         private void RegisterHandlers()
         {
             _handlerTokenDictionary.Add(HandlerType.NavigationComplete, _webView2WebView.RegisterNavigationCompleted(OnNavigationCompleted));
@@ -991,6 +1139,7 @@ namespace MtrDev.WebView2.Wpf
             _handlerTokenDictionary.Add(HandlerType.TitleChanged, _webView2WebView.RegisterDocumentTitledChanged(OnDocumentTitleChanged));
             _handlerTokenDictionary.Add(HandlerType.NewWindow, _webView2WebView.RegisterNewWindowRequested(OnNewWindowRequested));
             _handlerTokenDictionary.Add(HandlerType.AcceleratorKeyPressed, _webView2WebView.RegisterAcceleratorKeyPressed(OnAcceleratorKeyPressed));
+            _handlerTokenDictionary.Add(HandlerType.FullScreenElement, _webView2WebView.RegisterContainsFullScreenElementChanged(OnContainsFullScreenElementChanged));
             _handlersRegistered = true;
         }
 
@@ -998,6 +1147,7 @@ namespace MtrDev.WebView2.Wpf
         {
             if (!_handlersRegistered)
                 return;
+            _handlersRegistered = false;
             foreach (long token in _devToolsProtocolEventTokenDictionary.Values)
             {
                 _webView2WebView.UnregisterDevToolsProtocolEventReceived(token);
@@ -1018,6 +1168,7 @@ namespace MtrDev.WebView2.Wpf
             _webView2WebView.UnregisterDocumentTitledChanged(_handlerTokenDictionary[HandlerType.TitleChanged]);
             _webView2WebView.UnregisterNewWindowRequested(_handlerTokenDictionary[HandlerType.NewWindow]);
             _webView2WebView.UnregisterAcceleratorKeyPressed(_handlerTokenDictionary[HandlerType.AcceleratorKeyPressed]);
+            _webView2WebView.UnRegisterContainsFullScreenElementChanged(_handlerTokenDictionary[HandlerType.FullScreenElement]);
         }
 
 
@@ -1051,7 +1202,7 @@ namespace MtrDev.WebView2.Wpf
             }
         }
 
-        private bool MoveFocus(WEBVIEW2_MOVE_FOCUS_REASON reason)
+        public bool MoveFocus(WEBVIEW2_MOVE_FOCUS_REASON reason)
         {
             if (_webView2WebView == null)
                 return false;
@@ -1111,16 +1262,29 @@ namespace MtrDev.WebView2.Wpf
         protected override void DestroyWindowCore(HandleRef hwnd)
         {
             UnregisterHandlers();
-            if (_webView2WebView != null)
+            try
             {
-                _webView2WebView.IsVisible = false;
-                _webView2WebView.Close();
-                _webView2WebView = null;
+                if (_webView2WebView != null)
+                {
+                    _webView2WebView.IsVisible = false;
+                    _webView2WebView.Close();
+                    _webView2WebView = null;
+                }
             }
-            if (_webView2Host != null)
+            catch(Exception)
             {
-                _webView2Host.DestroyHandle();
-                _webView2Host = null;
+            }
+
+            try
+            {
+                if (_webView2Host != null)
+                {
+                    _webView2Host.DestroyHandle();
+                    _webView2Host = null;
+                }
+            }
+            catch (Exception)
+            {
             }
         }
     }
@@ -1130,7 +1294,7 @@ namespace MtrDev.WebView2.Wpf
     /// for the WebView2 that we can return to HwndHost
     /// </summary>
     [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
-    internal class BrowserParentWindow : NativeWindow
+    internal class BrowserParentWindow : WinForms.NativeWindow
     {
         // Constant values were found in the "windows.h" header file.
         private const int WS_CHILD = 0x40000000,
@@ -1144,7 +1308,7 @@ namespace MtrDev.WebView2.Wpf
         public BrowserParentWindow(IntPtr parent)
         {
 
-            CreateParams cp = new CreateParams();
+            WinForms.CreateParams cp = new WinForms.CreateParams();
 
             // Fill in the CreateParams details.
             cp.Caption = "WebView2ControlHost";
@@ -1168,7 +1332,7 @@ namespace MtrDev.WebView2.Wpf
         }
 
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
-        protected override void WndProc(ref Message m)
+        protected override void WndProc(ref WinForms.Message m)
         {
             // Listen for messages that are sent to the button window. Some messages are sent
             // to the parent window instead of the button's window.

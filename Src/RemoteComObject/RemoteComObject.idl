@@ -1,0 +1,38 @@
+// RemoteComObject.idl : IDL source for RemoteComObject
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (RemoteComObject.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(BC4C0BCE-56F6-45BF-A9D4-6E314C9D2A4D),
+	dual,
+	nonextensible,
+	pointer_default(unique)
+]
+interface IRemoteComObjectImpl : IDispatch{
+	[propget, id(1)] HRESULT Property([out, retval] BSTR* pVal);
+	[propput, id(1)] HRESULT Property([in] BSTR newVal);
+	[id(2)] HRESULT MethodWithParametersAndReturnValue(BSTR stringParameter, INT integerParameter, [out, retval] BSTR* stringResult);
+	[id(3)] HRESULT CallCallbackAsynchronously(IDispatch* callbackParameter);
+};
+[
+	uuid(82003E2C-6641-4643-A5D6-11B8BB7497B8),
+	version(1.0),
+]
+library RemoteComObjectLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(3328FE46-65D4-431D-B356-E2FE2525C4B8)		
+	]
+	coclass RemoteComObjectImpl
+	{
+		[default] interface IRemoteComObjectImpl;
+	};
+};
+

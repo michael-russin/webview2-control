@@ -28,6 +28,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace MtrDev.WebView2.Winforms
@@ -335,7 +337,7 @@ namespace MtrDev.WebView2.Winforms
         {
             get
             {
-                if (_webView2WebView == null)
+                if (_webView2WebView != null)
                     return _webView2WebView.BrowserProcessId;
                 return 0;
             }
@@ -578,6 +580,14 @@ namespace MtrDev.WebView2.Winforms
             //return base.Focus();
         }
 
+        public bool MoveFocus(WEBVIEW2_MOVE_FOCUS_REASON reason)
+        {
+            if (_webView2WebView == null)
+                return false;
+            _webView2WebView.MoveFocus(reason);
+            return true;
+        }
+
         /// <summary>
         /// Add the provided JavaScript to a list of scripts
         /// that should be executed after the global object has been created, but
@@ -631,6 +641,7 @@ namespace MtrDev.WebView2.Winforms
         {
             if (_webView2WebView == null)
                 return;
+            UnregisterHandlers();
             _webView2WebView.Close();
         }
 
@@ -668,6 +679,28 @@ namespace MtrDev.WebView2.Winforms
                 return;
             _webView2WebView.RemoveWebResourceRequestedFilter(uri, resourceContext);
         }
+
+        public void CapturePreview(WEBVIEW2_CAPTURE_PREVIEW_IMAGE_FORMAT imageFormat, Stream imageStream, Action<CapturePreviewCompletedArgs> callback)
+        {
+            if (_webView2WebView == null)
+                return;
+            _webView2WebView.CapturePreview(imageFormat, imageStream, callback);
+        }
+
+        public void AddRemoteObject(string name, ref object remoteObject)
+        {
+            if (_webView2WebView == null)
+                return;
+            _webView2WebView.AddRemoteObject(name, ref remoteObject);
+        }
+
+        public void RemoveRemoteObject(string name)
+        {
+            if (_webView2WebView == null)
+                return;
+            _webView2WebView.RemoveRemoteObject(name);
+        }
+
         #endregion
 
         #region Public Events
@@ -814,6 +847,20 @@ namespace MtrDev.WebView2.Winforms
         /// </summary>
         public event EventHandler<WebResourceRequestedEventArgs> WebResourceRequested;
 
+        /// <summary>
+        /// See the
+        /// [DevTools Protocol Viewer](https://aka.ms/DevToolsProtocolDocs)
+        /// for a list and description of available events.
+        /// The eventName parameter is the full name of the event in the format
+        /// `{domain}.{event}`.
+        /// The handler's Invoke method will be called whenever the corresponding
+        /// DevToolsProtocol event fires. Invoke will be called with the
+        /// an event args object containing the CDP event's parameter object as a JSON
+        /// string.
+        ///
+        /// </summary>
+        public event EventHandler<DevToolsProtocolEventReceivedEventArgs> DevToolsProtocolEventReceived;
+
         #endregion
 
         #region Public Overrides
@@ -861,9 +908,28 @@ namespace MtrDev.WebView2.Winforms
         {
             if (_webView2WebView != null)
             {
-                _webView2WebView.MoveFocus(WEBVIEW2_MOVE_FOCUS_REASON.WEBVIEW2_MOVE_FOCUS_REASON_PROGRAMMATIC);
+                try
+                {
+                    _webView2WebView.MoveFocus(WEBVIEW2_MOVE_FOCUS_REASON.WEBVIEW2_MOVE_FOCUS_REASON_PROGRAMMATIC);
+                }
+                catch (COMException) {}
             }
             base.OnGotFocus(e);
+        }
+
+        protected override void Select(bool directed, bool forward)
+        {
+            base.Select(directed, forward);
+            if (directed)
+            {
+                if (_webView2WebView != null)
+                {
+                    if (forward)
+                        _webView2WebView.MoveFocus(WEBVIEW2_MOVE_FOCUS_REASON.WEBVIEW2_MOVE_FOCUS_REASON_NEXT);
+                    else
+                        _webView2WebView.MoveFocus(WEBVIEW2_MOVE_FOCUS_REASON.WEBVIEW2_MOVE_FOCUS_REASON_PREVIOUS);
+                }
+            }
         }
         #endregion
 
@@ -937,6 +1003,10 @@ namespace MtrDev.WebView2.Winforms
 
         protected virtual void OnDevToolsProtocolEventReceived(DevToolsProtocolEventReceivedEventArgs e)
         {
+            if (DevToolsProtocolEventReceived != null)
+            {
+                DevToolsProtocolEventReceived(this, e);
+            }
         }
 
 
@@ -963,7 +1033,6 @@ namespace MtrDev.WebView2.Winforms
             {
                 WebResourceRequested(this, e);
             }
-
         }
 
         protected virtual void OnScriptDialogOpening(ScriptDialogOpeningEventArgs e)
@@ -988,6 +1057,10 @@ namespace MtrDev.WebView2.Winforms
         /// <param name="e"></param>
         protected virtual void OnProcessFailed(ProcessFailedEventArgs e)
         {
+            // Communication with the underlying webView2 is broken
+            _webView2WebView = null;
+            _handlersRegistered = false;
+
             if (ProcessFailed != null)
             {
                 ProcessFailed(this, e);
@@ -1099,6 +1172,7 @@ namespace MtrDev.WebView2.Winforms
         {
             if (!_handlersRegistered)
                 return;
+            _handlersRegistered = false;
             foreach (long token in _devToolsProtocolEventTokenDictionary.Values)
             {
                 _webView2WebView.UnregisterDevToolsProtocolEventReceived(token);
@@ -1119,7 +1193,7 @@ namespace MtrDev.WebView2.Winforms
             _webView2WebView.UnregisterDocumentTitledChanged(_handlerTokenDictionary[HandlerType.TitleChanged]);
             _webView2WebView.UnregisterNewWindowRequested(_handlerTokenDictionary[HandlerType.NewWindow]);
             _webView2WebView.UnregisterAcceleratorKeyPressed(_handlerTokenDictionary[HandlerType.AcceleratorKeyPressed]);
-            _webView2WebView.UndegisterContainsFullScreenElementChanged(_handlerTokenDictionary[HandlerType.FullScreenElement]);
+            _webView2WebView.UnRegisterContainsFullScreenElementChanged(_handlerTokenDictionary[HandlerType.FullScreenElement]);
         }
 
 
@@ -1157,14 +1231,6 @@ namespace MtrDev.WebView2.Winforms
                     return _internalUrl;
                 return _webView2WebView.Source;
             }
-        }
-
-        private bool MoveFocus(WEBVIEW2_MOVE_FOCUS_REASON reason)
-        {
-            if (_webView2WebView == null)
-                return false;
-            _webView2WebView.MoveFocus(reason);
-            return true;
         }
 
         #endregion
