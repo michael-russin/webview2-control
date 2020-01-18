@@ -145,8 +145,9 @@ namespace WebView2.Wpf.Sample
                 }
                 else
                 {
-                    CommonDialogs.ShowFailure(e.Result, "Failed to create webview environment");
+                    Dispatcher.BeginInvoke(new Action(() => CommonDialogs.ShowFailure(e.Result, "Failed to create webview environment")));
                 }
+                return;
             }
             _environment = e.WebViewEnvironment;
             _newVersionToken = _environment.RegisterNewVersionAvailable(OnNewVersionAvailable);

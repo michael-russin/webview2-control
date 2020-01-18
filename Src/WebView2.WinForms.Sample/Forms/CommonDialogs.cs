@@ -11,7 +11,7 @@ namespace MtrDev.WebView2.WinForms.Sample.Forms
     {
         public static void ShowFailure(int hr, string message)
         {
-            string formattedMessage = message + " " + hr.ToString("H");
+            string formattedMessage = message + " " + hr.ToString("X");
             MessageBox.Show(formattedMessage, "Erorr", MessageBoxButtons.OK);
         }
 

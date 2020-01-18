@@ -1089,7 +1089,10 @@ namespace MtrDev.WebView2.Wpf
 
             OnEnvironmentCreated(args);
 
-            _webViewEnvironment.CreateWebView(_parentWindow, OnWebViewCreated);
+            if (args.Result == 0)
+            {
+                _webViewEnvironment.CreateWebView(_parentWindow, OnWebViewCreated);
+            }
         }
 
         private void OnWebViewCreated(CreateWebViewCompletedEventArgs args)

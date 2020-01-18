@@ -133,6 +133,7 @@ namespace MtrDev.WebView2.WinForms.Sample
                 {
                     CommonDialogs.ShowFailure(e.Result, "Failed to create webview environment");
                 }
+                return;
             }
             _environment = e.WebViewEnvironment;
             _newVersionToken = _environment.RegisterNewVersionAvailable(OnNewVersionAvailable);

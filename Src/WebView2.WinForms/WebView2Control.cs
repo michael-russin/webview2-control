@@ -1113,7 +1113,10 @@ namespace MtrDev.WebView2.Winforms
 
             OnEnvironmentCreated(args);
 
-            _webViewEnvironment.CreateWebView(Handle, OnWebViewCreated);
+            if (args.Result == 0)
+            {
+                _webViewEnvironment.CreateWebView(Handle, OnWebViewCreated);
+            }
         }
 
         private void OnWebViewCreated(CreateWebViewCompletedEventArgs args)
