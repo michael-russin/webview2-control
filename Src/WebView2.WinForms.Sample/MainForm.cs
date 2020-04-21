@@ -26,7 +26,7 @@ namespace MtrDev.WebView2.WinForms.Sample
         private WebView2Environment _environment;
         private WebView2Control _webView2Control;
         private NewWindowRequestedEventArgs _newWindowRequestedEventArgs;
-        private IWebView2Deferral _newWindowDeferral;
+        private ICoreWebView2Deferral _newWindowDeferral;
         private string _initialUrl;
         private Action _onWebViewFirstInitialized;
 
@@ -57,7 +57,7 @@ namespace MtrDev.WebView2.WinForms.Sample
             InitializeWebView();
         }
 
-        public MainForm(NewWindowRequestedEventArgs args, IWebView2Deferral deferral) : this(string.Empty, null)
+        public MainForm(NewWindowRequestedEventArgs args, ICoreWebView2Deferral deferral) : this(string.Empty, null)
         {
             _newWindowRequestedEventArgs = args;
             _newWindowDeferral = deferral;
@@ -94,7 +94,7 @@ namespace MtrDev.WebView2.WinForms.Sample
                         return ()=> { /*CreateNewThread();*/ };
                     case 'W':
                         
-                        return () =>{ CloseWebView(); };
+                        return () =>{ CloseWebView(false); };
                 }
             }
             return null;
@@ -139,7 +139,7 @@ namespace MtrDev.WebView2.WinForms.Sample
             _newVersionToken = _environment.RegisterNewVersionAvailable(OnNewVersionAvailable);
         }
 
-        private void CloseWebView()
+        private void CloseWebView(bool cleanupUserDataFolder)
         {
             if (_webView2Control != null)
             {
@@ -173,12 +173,42 @@ namespace MtrDev.WebView2.WinForms.Sample
                 _webView2Control.Dispose();
                 _webView2Control = null;
             }
-        }
 
+            if (cleanupUserDataFolder)
+            {
+                // For non-UWP apps, the default user data folder {Executable File Name}.WebView2
+                // is in the same directory next to the app executable. If end
+                // developers specify userDataFolder during WebView environment
+                // creation, they would need to pass in that explicit value here.
+                // For more information about userDataFolder:
+                // https://docs.microsoft.com/microsoft-edge/hosting/webview2/reference/webview2.idl#createwebview2environmentwithdetails
+                string userDataFolder = Environment.CurrentDirectory;
+                // Obtain the absolute path for relative paths that include "./" or "../"
+                userDataFolder = Path.Combine(userDataFolder, "MtrDev.WebView2.WinForms.Sample.exe.WebView2");
+                string userDataFolderPath = userDataFolder;
+
+                string message = "Are you sure you want to clean up the user data folder at\n";
+                message += userDataFolderPath;
+                message += "\n?\nWarning: This action is not reversible.\n\n";
+                message += "Click No if there are other open WebView instnaces.\n";
+
+                if (MessageBox.Show(this, message, "Cleanup User Data Folder", MessageBoxButtons.YesNo) ==
+                    DialogResult.Yes)
+                {
+                    try
+                    {
+                        Directory.Delete(userDataFolderPath, true);
+                    }
+                    catch(Exception)
+                    {
+                    }
+                }
+            }
+        }
 
         private void InitializeWebView()
         {
-            CloseWebView();
+            CloseWebView(false);
 
             _webView2Control = new WebView2Control();
 
@@ -211,7 +241,7 @@ namespace MtrDev.WebView2.WinForms.Sample
 
             // We need to close the current webviews and wait for the browser_process to exit
             // This is so the new webviews don't use the old browser exe
-            CloseWebView();
+            CloseWebView(false);
 
             // Make sure the browser process inside webview is closed
             ProcessUtil.EnsureProcessIsClosed(webviewProcessId, 2000);
@@ -259,7 +289,7 @@ namespace MtrDev.WebView2.WinForms.Sample
             uint webviewProcessId = _webView2Control.BrowserProcessId;
 
             // To restart the app completely, first we close the current App Window
-            CloseWebView();
+            CloseWebView(false);
 
             // Make sure the browser process inside webview is closed
             ProcessUtil.EnsureProcessIsClosed(webviewProcessId, 2000);
@@ -269,7 +299,7 @@ namespace MtrDev.WebView2.WinForms.Sample
 
         private void _webView2Control_NewWindowRequested(object sender, NewWindowRequestedEventArgs e)
         {
-            IWebView2Deferral deferral = e.GetDeferral();
+            ICoreWebView2Deferral deferral = e.GetDeferral();
             MainForm newWindow = new MainForm(e, deferral);
             newWindow.Show();
         }
@@ -383,7 +413,7 @@ namespace MtrDev.WebView2.WinForms.Sample
         private void getBrowserVersionBeforeCreationToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string versionInfo;
-            Globals.GetWebView2BrowserVersionInfo(null, out versionInfo);
+            Globals.GetCoreWebView2BrowserVersionInfo(null, out versionInfo);
             MessageBox.Show(versionInfo, "Browser Version Info Before WebView Creation", MessageBoxButtons.OK);
         }
 
@@ -441,7 +471,12 @@ namespace MtrDev.WebView2.WinForms.Sample
         #region Window Menu Item 
         private void closeWebViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CloseWebView();
+            CloseWebView(false);
+        }
+
+        private void closeWebViewAndCleanupUserDataFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CloseWebView(true);
         }
 
         private void createWebViewToolStripMenuItem_Click(object sender, EventArgs e)
@@ -524,6 +559,16 @@ namespace MtrDev.WebView2.WinForms.Sample
         private void toggleContextMenusEnabledToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _settingsComponent.ToggleContextMenuEnagled();
+        }
+
+        private void toggleRemoteObjectsAllowedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _settingsComponent.ToggleRemoteObjects();
+        }
+
+        private void toggleZoomControlEnabledToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _settingsComponent.ToggleZoomEnabled();
         }
         #endregion Settings Menu Item
 
@@ -629,6 +674,7 @@ namespace MtrDev.WebView2.WinForms.Sample
             form.ShowDialog();
         }
         #endregion Help Menu Items
+
     }
 }
     

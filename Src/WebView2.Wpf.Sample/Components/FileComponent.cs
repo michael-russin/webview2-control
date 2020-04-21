@@ -43,7 +43,7 @@ namespace MtrDev.WebView2.WinForms.Sample.Components
             else if (command == FileCommands.VersionBeforeCreation)
             {
                 string versionInfo;
-                Globals.GetWebView2BrowserVersionInfo(null, out versionInfo);
+                Globals.GetCoreWebView2BrowserVersionInfo(null, out versionInfo);
                 MessageBox.Show(versionInfo, "Browser Version Info Before WebView Creation", MessageBoxButton.OK);
             }
             else if (command == FileCommands.VersionAfterCreation)

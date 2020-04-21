@@ -97,16 +97,14 @@ namespace MtrDev.WebView2.WinForms.Sample.Components
 
                 // If the user clicked a link to navigate, show a warning page.
                 bool userInitiated = e.IsUserInitiated;
-                if (userInitiated)
-                {
-                    //! [NavigateToString]
-                    string htmlContent =
-                        "<h1>Domain Blocked</h1>" +
-                        "<p>You've attempted to navigate to a domain in the blocked " +
-                        "sites list. Press back to return to the previous page.</p>";
-                    _webView2.NavigateToString(htmlContent);
-                    //! [NavigateToString]
-                }
+
+                //! [NavigateToString]
+                string htmlContent =
+                    "<h1>Domain Blocked</h1>" +
+                    "<p>You've attempted to navigate to a domain in the blocked " +
+                    "sites list. Press back to return to the previous page.</p>";
+                _webView2.NavigateToString(htmlContent);
+                //! [NavigateToString]
             }
             //! [IsScriptEnabled]
             // Changes to settings will apply at the next navigation, which includes the
@@ -140,7 +138,7 @@ namespace MtrDev.WebView2.WinForms.Sample.Components
         }
 
         private TextInputDialog _textInputDialog;
-        private IWebView2Deferral _deferral;
+        private ICoreWebView2Deferral _deferral;
         private ScriptDialogOpeningEventArgs _scriptDialogOpeningEventArgs;
 
         /// <summary>
@@ -531,10 +529,49 @@ namespace MtrDev.WebView2.WinForms.Sample.Components
 
         public void ToggleFullScreenAllowed()
         {
-            _fullScreenAllowed = !_fullScreenAllowed;
+            FullScreenAllowed = !FullScreenAllowed;
             MessageBox.Show("Fullscreen is now " +
                            (_fullScreenAllowed ? "allowed" : "disallowed"),
                             "", MessageBoxButtons.OK);
+        }
+
+        public void ToggleRemoteObjects()
+        {
+            bool allowRemoteObjects = _webView2.AreRemoteObjectsAllowed;
+            if (allowRemoteObjects)
+            {
+                _webView2.AreRemoteObjectsAllowed = false;
+                MessageBox.Show(
+                    "Access to remote objects will be denied after the next navigation.",
+                    "Settings change", MessageBoxButtons.OK);
+            }
+            else
+            {
+                _webView2.AreRemoteObjectsAllowed = true;
+                MessageBox.Show(
+                    "Access to remote objects will be allowed after the next navigation.",
+                    "Settings change", MessageBoxButtons.OK);
+            }
+        }
+
+        public void ToggleZoomEnabled()
+        {
+            bool zoomControlEnabled = _webView2.IsZoomControlEnabled;
+            if (zoomControlEnabled)
+            {
+                _webView2.IsZoomControlEnabled = false;
+                MessageBox.Show(
+                    "Zoom control is disabled after the next navigation.", "Settings change",
+                    MessageBoxButtons.OK);
+            }
+            else
+            {
+                _webView2.IsZoomControlEnabled = true;
+                MessageBox.Show(
+                    "Zoom control is enabled after the next navigation.", "Settings change",
+                    MessageBoxButtons.OK);
+            }
+
         }
     }
 }

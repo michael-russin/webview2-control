@@ -1,6 +1,7 @@
 ﻿using MtrDev.WebView2.Interop;
 using MtrDev.WebView2.Wpf;
 using MtrDev.WebView2.Wpf.Sample.Controls;
+using MtrDev.WebView2.Wrapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,8 @@ namespace MtrDev.WebView2.WinForms.Sample.Components
             _toolbar = toolbar;
             _webView2 = webView2;
             _webView2.NavigationStarting += WebView2NavigationStarting;
-            _webView2.DocumentStateChanged += WebView2DocumentStateChanged;
+            _webView2.SourceChanged += WebView2SourceChanged;
+            _webView2.HistoryChanged += WebView2HistoryChanged;
             _webView2.NavigationCompleted += WebView2NavigationCompleted;
             _webView2.MoveFocusRequested += WebView2MoveFocusRequested;
             _webView2.AcceleratorKeyPressed += WebView2AcceleratorKeyPressed;
@@ -32,18 +34,14 @@ namespace MtrDev.WebView2.WinForms.Sample.Components
         public override void CleanUp()
         {
             _webView2.NavigationStarting -= WebView2NavigationStarting;
-            _webView2.DocumentStateChanged -= WebView2DocumentStateChanged;
             _webView2.NavigationCompleted -= WebView2NavigationCompleted;
+            _webView2.SourceChanged -= WebView2SourceChanged;
+            _webView2.HistoryChanged -= WebView2HistoryChanged;
             _webView2.MoveFocusRequested -= WebView2MoveFocusRequested;
             _webView2.AcceleratorKeyPressed -= WebView2AcceleratorKeyPressed;
             _webView2 = null;
             _toolbar = null;
             _parent = null;
-        }
-
-        public override void RunCommand(ICommand command, ExecutedRoutedEventArgs args)
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -58,19 +56,32 @@ namespace MtrDev.WebView2.WinForms.Sample.Components
         }
 
         /// <summary>
-        /// Register a handler for the DocumentStateChanged event.
+        /// Register a handler for the SourceChanged event.
         /// This handler will read the webview's source URI and update
         /// the app's address bar.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void WebView2DocumentStateChanged(object sender, Wrapper.DocumentStateChangedEventArgs e)
+        private void WebView2SourceChanged(object sender, Wrapper.SourceChangedEventArgs e)
         {
             string source = _webView2.Source;
             if (source == "about::blank")
                 source = "";
             _toolbar.Url = source;
+        }
 
+        /// <summary>
+        /// Register a handler for the HistoryChanged event.
+        /// Update the Back, Forward buttons.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void WebView2HistoryChanged(object sender, Wrapper.HistoryChangedEventArgs e)
+        {
+            bool canGoBack = _webView2.CanGoBack;
+            bool canGoForward = _webView2.CanGoForward;
+            _toolbar.CanGoBack = canGoBack;
+            _toolbar.CanGoForward = canGoForward;
         }
 
         /// <summary>
@@ -152,10 +163,39 @@ namespace MtrDev.WebView2.WinForms.Sample.Components
             }
         }
 
+
+        public override void RunCommand(ICommand command, ExecutedRoutedEventArgs args)
+        {
+            throw new NotImplementedException();
+        }
+
         public void NavigateToAddressBar()
         {
             string url = _toolbar.Url;
-            _webView2.Navigate(url);
+            bool navigated = false;
+            try
+            {
+                _webView2.Navigate(url);
+                navigated = true;
+            }
+            catch (ArgumentException) { }
+
+            if (!navigated)
+            {
+                if (!url.Contains(' ') &&
+                    url.Contains('.'))
+                {
+                    // If it contains a dot and no spaces, try tacking http:// on the front.
+                    _webView2.Navigate("http://" + url);
+                }
+                else
+                {
+                    // Otherwise treat it as a web search. We aren't bothering to escape
+                    // URL syntax characters such as & and #
+                    _webView2.Navigate("https://bing.com/search?q=" + url);
+                }
+
+            }
         }
     }
 }

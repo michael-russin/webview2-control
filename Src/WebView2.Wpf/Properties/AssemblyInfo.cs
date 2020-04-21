@@ -12,7 +12,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MtrDev")]
 [assembly: AssemblyProduct("MtrDev.Wpf.WebView2")]
-[assembly: AssemblyCopyright("Copyright ©  2019")]
+[assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -51,5 +51,5 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.8.355.2")]
-[assembly: AssemblyFileVersion("1.8.355.2")]
+[assembly: AssemblyVersion("1.9.430.3")]
+[assembly: AssemblyFileVersion("1.9.430.3")]

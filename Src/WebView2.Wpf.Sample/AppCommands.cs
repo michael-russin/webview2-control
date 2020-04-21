@@ -112,6 +112,13 @@ namespace MtrDev.WebView2.Wpf.Sample
             typeof(WindowCommands)
         );
 
+        public static readonly RoutedUICommand CloseWebViewAndClear = new RoutedUICommand
+        (
+            "Close WebView and cleanup user data folder",
+            "CloseWebViewAndClear",
+            typeof(WindowCommands)
+        );
+
         public static readonly RoutedUICommand CreateWebView = new RoutedUICommand
         (
             "Create WebView",
@@ -239,6 +246,18 @@ namespace MtrDev.WebView2.Wpf.Sample
             "Togglecontextmenusenabled",
             typeof(SettingsCommands)
         );
+        public static readonly RoutedUICommand ToggleRemoteObjectsAllowed = new RoutedUICommand
+        (
+            "Toggle remote objects allowed",
+            "ToggleRemoteObjectsAllowed",
+            typeof(SettingsCommands)
+        );
+        public static readonly RoutedUICommand ToggleZoomControlAllowed = new RoutedUICommand
+        (
+            "Toggle zoom control enabled",
+            "Togglezoomcontrolenabled",
+            typeof(SettingsCommands)
+        );        
     }
 
     public static class ViewCommands

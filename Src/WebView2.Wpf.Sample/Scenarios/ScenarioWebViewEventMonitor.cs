@@ -50,7 +50,6 @@ namespace MtrDev.WebView2.WinForms.Sample.Scenarios
             _webviewEventView = webView;
 
             _eventSourceWebView2.NavigationStarting += WebView2NavigationStarting;
-            _eventSourceWebView2.DocumentStateChanged += WebView2DocumentStateChanged;
             _eventSourceWebView2.NavigationCompleted += WebView2NavigationCompleted;
             _eventSourceWebView2.DocumentTitleChanged += WebView2DocumentTitleChanged;
             _eventSourceWebView2.WebMessageRecieved += WebView2WebMessageRecieved;
@@ -63,7 +62,6 @@ namespace MtrDev.WebView2.WinForms.Sample.Scenarios
         public override void CleanUp()
         {
             _eventSourceWebView2.NavigationStarting -= WebView2NavigationStarting;
-            _eventSourceWebView2.DocumentStateChanged -= WebView2DocumentStateChanged;
             _eventSourceWebView2.NavigationCompleted -= WebView2NavigationCompleted;
             _eventSourceWebView2.DocumentTitleChanged -= WebView2DocumentTitleChanged;
             _eventSourceWebView2.WebMessageRecieved -= WebView2WebMessageRecieved;
@@ -96,22 +94,6 @@ namespace MtrDev.WebView2.WinForms.Sample.Scenarios
                 "\"isSuccess\": " + BoolToString(isSuccess) + ", " +
                            "\"webErrorStatus\": " + EncodeQuote(WebErrorStatusToString(webErrorStatus)) + " " +
                            "}" +
-                    WebViewPropertiesToJsonString(_eventSourceWebView2) +
-                    "}";
-            PostEventMessage(message);
-        }
-
-        private void WebView2DocumentStateChanged(object sender, DocumentStateChangedEventArgs e)
-        {
-            bool isErrorPage = e.IsErrorPage;
-            bool isNewDocument = e.IsNewDocument;
-
-            string message =
-                "{ \"kind\": \"event\", \"name\": \"DocumentStateChanged\", \"args\": {";
-            message +=
-                "\"isErrorPage\": " + BoolToString(isErrorPage) + ", " +
-                           "\"isNewDocument\": " + BoolToString(isNewDocument) +
-                    "}" +
                     WebViewPropertiesToJsonString(_eventSourceWebView2) +
                     "}";
             PostEventMessage(message);

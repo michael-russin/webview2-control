@@ -23,6 +23,8 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
+using System;
+
 namespace MtrDev.WebView2.Winforms
 {
     internal enum HandlerType
@@ -31,6 +33,7 @@ namespace MtrDev.WebView2.Winforms
         NavigationComplete = 1,
         ZoomFactorChanged = 2,
         WebMessageReceived = 3,
+        [Obsolete]
         DocumentStateChanged = 4,
         LostFocus = 5,
         FrameNavigationStarting = 6,
@@ -43,6 +46,9 @@ namespace MtrDev.WebView2.Winforms
         TitleChanged = 13,
         NewWindow = 14,
         AcceleratorKeyPressed = 15,
-        FullScreenElement = 16
+        FullScreenElement = 16,
+        ContentLoading = 17,
+        SourceChanged = 18,
+        HistoryChanged = 19,
     }
 }

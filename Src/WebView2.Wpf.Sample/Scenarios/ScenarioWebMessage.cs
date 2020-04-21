@@ -25,7 +25,6 @@ namespace MtrDev.WebView2.WinForms.Sample.Scenarios
             _webView2.IsWebMessageEnabled = true;
 
             _webView2.WebMessageRecieved += WebView2WebMessageRecieved;
-            _webView2.DocumentStateChanged += WebView2DocumentStateChanged;
 
             // Changes to IWebView2Settings::IsWebMessageEnabled apply to the next document
             // to which we navigate.
@@ -35,7 +34,6 @@ namespace MtrDev.WebView2.WinForms.Sample.Scenarios
         public override void CleanUp()
         {
             _webView2.WebMessageRecieved -= WebView2WebMessageRecieved;
-            _webView2.DocumentStateChanged -= WebView2DocumentStateChanged;
 
             _webView2 = null;
             _parent = null;
@@ -44,20 +42,6 @@ namespace MtrDev.WebView2.WinForms.Sample.Scenarios
         public override void RunCommand(ICommand command, ExecutedRoutedEventArgs args)
         {
             throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// // Turn off this scenario if we navigate away from the sample page
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void WebView2DocumentStateChanged(object sender, Wrapper.DocumentStateChangedEventArgs e)
-        {
-            string url = _webView2.Source;
-            if (url != _sampleUri)
-            {
-                _parent.DeleteComponent(this);
-            }
         }
 
         private void WebView2WebMessageRecieved(object sender, Wrapper.WebMessageReceivedEventArgs e)

@@ -38,8 +38,8 @@
     <ApplicationIcon>small.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MtrDev.WebView2.Interop, Version=0.8.355.3, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MtrDev.WebView2.Interop.0.8.355.3\lib\net45\MtrDev.WebView2.Interop.dll</HintPath>
+    <Reference Include="MtrDev.WebView2.Interop, Version=0.9.430.3, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MtrDev.WebView2.Interop.0.9.430.3\lib\net45\MtrDev.WebView2.Interop.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -148,11 +148,11 @@
     <Content Include="small.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\Microsoft.Web.WebView2.0.8.355\build\Microsoft.Web.WebView2.targets" Condition="Exists('..\packages\Microsoft.Web.WebView2.0.8.355\build\Microsoft.Web.WebView2.targets')" />
+  <Import Project="..\packages\Microsoft.Web.WebView2.0.9.430\build\Microsoft.Web.WebView2.targets" Condition="Exists('..\packages\Microsoft.Web.WebView2.0.9.430\build\Microsoft.Web.WebView2.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.Web.WebView2.0.8.355\build\Microsoft.Web.WebView2.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Web.WebView2.0.8.355\build\Microsoft.Web.WebView2.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Web.WebView2.0.9.430\build\Microsoft.Web.WebView2.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Web.WebView2.0.9.430\build\Microsoft.Web.WebView2.targets'))" />
   </Target>
 </Project>

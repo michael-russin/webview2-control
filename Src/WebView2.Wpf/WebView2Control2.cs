@@ -10,6 +10,7 @@ using WinForms=System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Input;
 using System.IO;
+using SourceChangedEventArgs = MtrDev.WebView2.Wrapper.SourceChangedEventArgs;
 
 namespace MtrDev.WebView2.Wpf
 {
@@ -28,6 +29,8 @@ namespace MtrDev.WebView2.Wpf
         private bool _initialIsWebMessageEnabled = true;
         private bool _initialIsStatusBarEnabled = true;
         private bool _initialAreDefaultContextMenusEnabled = true;
+        private bool _initialAreRemoteObjectsAllowed = true;
+        private bool _initialIsZoomControlEnabled = true;
         private bool _hasFocus;
 
         public WebView2Control()
@@ -86,7 +89,7 @@ namespace MtrDev.WebView2.Wpf
 
         [Browsable(false),
          DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public IWebView2WebView InnerWebView2WebView
+        public ICoreWebView2 InnerWebView2WebView
         {
             get { return _webView2WebView.InnerWebView2WebView; }
         }
@@ -286,6 +289,44 @@ namespace MtrDev.WebView2.Wpf
                 if (_webView2WebView != null)
                 {
                     _webView2WebView.Settings.AreDefaultContextMenusEnabled = value;
+                }
+            }
+        }
+
+        [DefaultValue(true)]
+        public bool AreRemoteObjectsAllowed
+        {
+            get
+            {
+                if (_webView2WebView == null)
+                    return _initialAreRemoteObjectsAllowed;
+                return _webView2WebView.Settings.AreRemoteObjectsAllowed;
+            }
+            set
+            {
+                _initialAreRemoteObjectsAllowed = value;
+                if (_webView2WebView != null)
+                {
+                    _webView2WebView.Settings.AreRemoteObjectsAllowed = value;
+                }
+            }
+        }
+
+        [DefaultValue(true)]
+        public bool IsZoomControlEnabled
+        {
+            get
+            {
+                if (_webView2WebView == null)
+                    return _initialIsZoomControlEnabled;
+                return _webView2WebView.Settings.IsZoomControlEnabled;
+            }
+            set
+            {
+                _initialIsZoomControlEnabled = value;
+                if (_webView2WebView != null)
+                {
+                    _webView2WebView.Settings.IsZoomControlEnabled = value;
                 }
             }
         }
@@ -532,8 +573,12 @@ namespace MtrDev.WebView2.Wpf
                 return;
             }
 
-            long token = _webView2WebView.RegisterDevToolsProtocolEventReceived(eventName, OnDevToolsProtocolEventReceived);
-            _devToolsProtocolEventTokenDictionary.Add(eventName, token);
+            WebView2DevToolsProtocolEventReceiver receiver = _webView2WebView.GetDevToolsProtocolEventReceiver(eventName);
+            if (receiver != null)
+            {
+                long token = receiver.RegisterDevToolsProtocolEventReceived(OnDevToolsProtocolEventReceived);
+                _devToolsProtocolEventTokenDictionary.Add(eventName, token);
+            }
         }
 
         /// <summary>
@@ -548,7 +593,11 @@ namespace MtrDev.WebView2.Wpf
             }
             long token = _devToolsProtocolEventTokenDictionary[eventName];
             _devToolsProtocolEventTokenDictionary.Remove(eventName);
-            _webView2WebView.UnregisterDevToolsProtocolEventReceived(token);
+            WebView2DevToolsProtocolEventReceiver reciever = _webView2WebView.GetDevToolsProtocolEventReceiver(eventName);
+            if (reciever != null)
+            {
+                reciever.UnregisterDevToolsProtocolEventReceived(token);
+            }
         }
 
         /// <summary>
@@ -724,21 +773,39 @@ namespace MtrDev.WebView2.Wpf
         public event EventHandler<NavigationStartingEventArgs> NavigationStarting;
 
         /// <summary>
+        /// fires before any content is loaded, including scripts added with
+        /// AddScriptToExecuteOnDocumentCreated
+        /// ContentLoading will not fire if a same page navigation occurs
+        /// (such as through fragment navigations or history.pushState navigations).
+        /// This follows the NavigationStarting and SourceChanged events and
+        /// precedes the HistoryChanged and NavigationCompleted events.
+        /// </summary>
+        public event EventHandler<ContentLoadingEventArgs> ContentLoading;
+
+        /// <summary>
+        /// Fires for navigating to a different site or fragment navigations.
+        /// It will not fires for other types of navigations such as page reloads or
+        /// history.pushState with the same URL as the current page.
+        /// SourceChanged fires before ContentLoading for navigation to a new document.
+        /// Add an event handler for the SourceChanged event.
+        /// </summary>
+        public event EventHandler<SourceChangedEventArgs> SourceChanged;
+
+        /// <summary>
+        /// HistoryChange listen to the change of navigation history for the top level
+        /// document. Use HistoryChange to check if get_CanGoBack/get_CanGoForward value
+        /// has changed. HistoryChanged also fires for using GoBack/GoForward.
+        /// HistoryChanged fires after SourceChanged and ContentLoading.
+        /// Add an event handler for the HistoryChanged event.
+        /// </summary>
+        public event EventHandler<HistoryChangedEventArgs> HistoryChanged;
+
+        /// <summary>
         /// fires when a child frame in the WebView
         /// requesting permission to navigate to a different URI. This will fire for
         /// redirects as well.
         /// </summary>
         public event EventHandler<NavigationStartingEventArgs> FrameNavigationStarting;
-
-        /// <summary>
-        /// DocumentStateChanged fires when new content has started loading
-        /// on the webview's main frame or if a same page navigation occurs (such as
-        /// through fragment navigations or history.pushState navigations).
-        /// This follows the NavigationStarting event and precedes the
-        /// NavigationCompleted event.
-        /// </summary>
-        [Browsable(false)]
-        public event EventHandler<DocumentStateChangedEventArgs> DocumentStateChanged;
 
         /// <summary>
         /// NavigationCompleted event fires when the WebView has completely loaded
@@ -945,7 +1012,28 @@ namespace MtrDev.WebView2.Wpf
             }
         }
 
+        protected virtual void OnContentLoading(ContentLoadingEventArgs e)
+        {
+            if (ContentLoading != null)
+            {
+                ContentLoading(this, e);
+            }
+        }
+        protected virtual void OnSourceChanged(SourceChangedEventArgs e)
+        {
+            if (SourceChanged != null)
+            {
+                SourceChanged(this, e);
+            }
+        }
 
+        protected virtual void OnHistoryChanged(HistoryChangedEventArgs e)
+        {
+            if (HistoryChanged != null)
+            {
+                HistoryChanged(this, e);
+            }
+        }
 
         protected virtual void OnNavigationCompleted(NavigationCompletedEventArgs e)
         {
@@ -971,13 +1059,6 @@ namespace MtrDev.WebView2.Wpf
             }
         }
 
-        protected virtual void OnDocumentStateChanged(DocumentStateChangedEventArgs e)
-        {
-            if (DocumentStateChanged != null)
-            {
-                DocumentStateChanged(this, e);
-            }
-        }
 
         protected virtual void OnDevToolsProtocolEventReceived(DevToolsProtocolEventReceivedEventArgs e)
         {
@@ -1128,9 +1209,11 @@ namespace MtrDev.WebView2.Wpf
         {
             _handlerTokenDictionary.Add(HandlerType.NavigationComplete, _webView2WebView.RegisterNavigationCompleted(OnNavigationCompleted));
             _handlerTokenDictionary.Add(HandlerType.NavigationStarting, _webView2WebView.RegisterNavigationStarting(OnNavigationStarting));
+            _handlerTokenDictionary.Add(HandlerType.ContentLoading, _webView2WebView.RegisterContentLoading(OnContentLoading));
+            _handlerTokenDictionary.Add(HandlerType.SourceChanged, _webView2WebView.RegisterSourceChanged(OnSourceChanged));
+            _handlerTokenDictionary.Add(HandlerType.HistoryChanged, _webView2WebView.RegisterHistoryChanged(OnHistoryChanged));
             _handlerTokenDictionary.Add(HandlerType.ZoomFactorChanged, _webView2WebView.RegisterZoomFactorChanged(OnZoomFactorChanged));
             _handlerTokenDictionary.Add(HandlerType.WebMessageReceived, _webView2WebView.RegisterWebMessageReceived(OnWebMessageRecieved));
-            _handlerTokenDictionary.Add(HandlerType.DocumentStateChanged, _webView2WebView.RegisterDocumentStateChanged(OnDocumentStateChanged));
             _handlerTokenDictionary.Add(HandlerType.LostFocus, _webView2WebView.RegisterLostFocus(OnBrowserLostFocus));
             _handlerTokenDictionary.Add(HandlerType.FrameNavigationStarting, _webView2WebView.RegisterFrameNavigationStarting(OnFrameNavigationStarting));
             _handlerTokenDictionary.Add(HandlerType.MoveFocusRequested, _webView2WebView.RegisterMoveFocusRequested(OnMoveFocusRequested));
@@ -1151,15 +1234,21 @@ namespace MtrDev.WebView2.Wpf
             if (!_handlersRegistered)
                 return;
             _handlersRegistered = false;
-            foreach (long token in _devToolsProtocolEventTokenDictionary.Values)
+            foreach (var nameValue in _devToolsProtocolEventTokenDictionary)
             {
-                _webView2WebView.UnregisterDevToolsProtocolEventReceived(token);
+                WebView2DevToolsProtocolEventReceiver receiver = _webView2WebView.GetDevToolsProtocolEventReceiver(nameValue.Key);
+                if (receiver != null)
+                {
+                    receiver.UnregisterDevToolsProtocolEventReceived(nameValue.Value);
+                }
             }
             _webView2WebView.UnregisterNavigationCompleted(_handlerTokenDictionary[HandlerType.NavigationComplete]);
             _webView2WebView.UnregisterNavigationStarting(_handlerTokenDictionary[HandlerType.NavigationStarting]);
+            _webView2WebView.UnregisterContentLoading(_handlerTokenDictionary[HandlerType.ContentLoading]);
+            _webView2WebView.UnregisterSourceChanged(_handlerTokenDictionary[HandlerType.SourceChanged]);
+            _webView2WebView.UnregisterHistoryChanged(_handlerTokenDictionary[HandlerType.HistoryChanged]);
             _webView2WebView.UnregisterZoomFactorChanged(_handlerTokenDictionary[HandlerType.ZoomFactorChanged]);
             _webView2WebView.UnregisterWebMessageReceived(_handlerTokenDictionary[HandlerType.WebMessageReceived]);
-            _webView2WebView.UnregisterDocumentStateChanged(_handlerTokenDictionary[HandlerType.DocumentStateChanged]);
             _webView2WebView.UnregisterLostFocus(_handlerTokenDictionary[HandlerType.LostFocus]);
             _webView2WebView.UnregisterFrameNavigationStarting(_handlerTokenDictionary[HandlerType.FrameNavigationStarting]);
             _webView2WebView.UnregisterMoveFocusRequested(_handlerTokenDictionary[HandlerType.MoveFocusRequested]);

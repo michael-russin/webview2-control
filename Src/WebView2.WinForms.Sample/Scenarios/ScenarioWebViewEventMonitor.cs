@@ -43,7 +43,9 @@ namespace MtrDev.WebView2.WinForms.Sample.Scenarios
             _webviewEventView = webView;
 
             _eventSourceWebView2.NavigationStarting += WebView2NavigationStarting;
-            _eventSourceWebView2.DocumentStateChanged += WebView2DocumentStateChanged;
+            _eventSourceWebView2.SourceChanged += WebView2SourceChanged; ;
+            _eventSourceWebView2.ContentLoading += WebView2ContentLoading;
+            _eventSourceWebView2.HistoryChanged += WebView2HistoryChanged;
             _eventSourceWebView2.NavigationCompleted += WebView2NavigationCompleted;
             _eventSourceWebView2.DocumentTitleChanged += WebView2DocumentTitleChanged;
             _eventSourceWebView2.WebMessageRecieved += WebView2WebMessageRecieved;
@@ -53,10 +55,44 @@ namespace MtrDev.WebView2.WinForms.Sample.Scenarios
             _webviewEventView.WebMessageRecieved += EventViewWebMessageRecieved;
         }
 
+        private void WebView2SourceChanged(object sender, SourceChangedEventArgs e)
+        {
+            bool isNewDocument = e.IsNewDocument;
+
+            string message =
+                "{ \"kind\": \"event\", \"name\": \"SourceChanged\", \"args\": {";
+            message += "\"isNewDocument\": " + BoolToString(isNewDocument) + "}" +
+                       WebViewPropertiesToJsonString(_eventSourceWebView2) + "}";
+            PostEventMessage(message);
+        }
+
+        private void WebView2HistoryChanged(object sender, HistoryChangedEventArgs e)
+        {
+            string message =
+                "{ \"kind\": \"event\", \"name\": \"HistoryChanged\", \"args\": {";
+            message +=
+                "}" + WebViewPropertiesToJsonString(_eventSourceWebView2) + "}";
+            PostEventMessage(message);
+        }
+
+        private void WebView2ContentLoading(object sender, ContentLoadingEventArgs e)
+        {
+            bool isErrorPage = e.IsErrorPage;
+            long navigationId = e.NavigationId;
+
+            string message =
+                "{ \"kind\": \"event\", \"name\": \"ContentLoading\", \"args\": {";
+
+            message += "\"navigationId\": " + navigationId + ", ";
+
+            message += "\"isErrorPage\": " + BoolToString(isErrorPage) + "}" +
+                       WebViewPropertiesToJsonString(_eventSourceWebView2) + "}";
+            PostEventMessage(message);
+        }
+
         public override void CleanUp()
         {
             _eventSourceWebView2.NavigationStarting -= WebView2NavigationStarting;
-            _eventSourceWebView2.DocumentStateChanged -= WebView2DocumentStateChanged;
             _eventSourceWebView2.NavigationCompleted -= WebView2NavigationCompleted;
             _eventSourceWebView2.DocumentTitleChanged -= WebView2DocumentTitleChanged;
             _eventSourceWebView2.WebMessageRecieved -= WebView2WebMessageRecieved;
@@ -82,29 +118,17 @@ namespace MtrDev.WebView2.WinForms.Sample.Scenarios
         {
             bool isSuccess = e.IsSuccess;
             WEBVIEW2_WEB_ERROR_STATUS webErrorStatus = e.WebErrorStatus;
+            long navigationId = e.NavigationId;
 
             string message =
                 "{ \"kind\": \"event\", \"name\": \"NavigationCompleted\", \"args\": {";
+
+            message += "\"navigationId\": " + navigationId + ", ";
+
             message +=
                 "\"isSuccess\": " + BoolToString(isSuccess) + ", " +
                            "\"webErrorStatus\": " + EncodeQuote(WebErrorStatusToString(webErrorStatus)) + " " +
                            "}" +
-                    WebViewPropertiesToJsonString(_eventSourceWebView2) +
-                    "}";
-            PostEventMessage(message);
-        }
-
-        private void WebView2DocumentStateChanged(object sender, DocumentStateChangedEventArgs e)
-        {
-            bool isErrorPage = e.IsErrorPage;
-            bool isNewDocument = e.IsNewDocument;
-
-            string message =
-                "{ \"kind\": \"event\", \"name\": \"DocumentStateChanged\", \"args\": {";
-            message +=
-                "\"isErrorPage\": " + BoolToString(isErrorPage) + ", " +
-                           "\"isNewDocument\": " + BoolToString(isNewDocument) +
-                    "}" +
                     WebViewPropertiesToJsonString(_eventSourceWebView2) +
                     "}";
             PostEventMessage(message);

@@ -25,6 +25,7 @@
         <CommandBinding Command="cmds:ScriptCommands.OpenDevToolsWindow" Executed="ScriptCommand_Executed" CanExecute="Command_CanExecute" />
 
         <CommandBinding Command="cmds:WindowCommands.CloseWebView" Executed="WindowCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:WindowCommands.CloseWebViewAndClear" Executed="WindowCommand_Executed" CanExecute="Command_CanExecute" />        
         <CommandBinding Command="cmds:WindowCommands.CreateWebView" Executed="WindowCommand_Executed" CanExecute="Command_CanExecute" />
         <CommandBinding Command="cmds:WindowCommands.CreateNewWindow" Executed="WindowCommand_Executed" CanExecute="Command_CanExecute" />
         <CommandBinding Command="cmds:WindowCommands.CreateNewThread" Executed="WindowCommand_Executed" CanExecute="Command_CanExecute" />
@@ -45,6 +46,8 @@
         <CommandBinding Command="cmds:SettingsCommands.UseDeferredScriptDialogs" Executed="SettingsCommand_Executed" CanExecute="Command_CanExecute" />
         <CommandBinding Command="cmds:SettingsCommands.CompleteDeferredScriptDialog" Executed="SettingsCommand_Executed" CanExecute="Command_CanExecute" />
         <CommandBinding Command="cmds:SettingsCommands.ToggleContextMenusEnabled" Executed="SettingsCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:SettingsCommands.ToggleRemoteObjectsAllowed" Executed="SettingsCommand_Executed" CanExecute="Command_CanExecute" />
+        <CommandBinding Command="cmds:SettingsCommands.ToggleZoomControlAllowed" Executed="SettingsCommand_Executed" CanExecute="Command_CanExecute" />        
 
         <CommandBinding Command="cmds:ViewCommands.ToggleVisibility" Executed="ViewCommand_Executed" CanExecute="Command_CanExecute" />
         <CommandBinding Command="cmds:ViewCommands.GetWebViewBounds" Executed="ViewCommand_Executed" CanExecute="Command_CanExecute" />
@@ -97,6 +100,7 @@
             </MenuItem>
             <MenuItem Header="_Window">
                 <MenuItem Command="cmds:WindowCommands.CloseWebView" />
+                <MenuItem Command="cmds:WindowCommands.CloseWebViewAndClear" />
                 <MenuItem Command="cmds:WindowCommands.CreateWebView" />
                 <MenuItem Command="cmds:WindowCommands.CreateNewWindow" />
                 <MenuItem Command="cmds:WindowCommands.CreateNewThread" />
@@ -123,6 +127,8 @@
                     <MenuItem Command="cmds:SettingsCommands.CompleteDeferredScriptDialog"/>
                 </MenuItem>
                 <MenuItem Command="cmds:SettingsCommands.ToggleContextMenusEnabled"/>
+                <MenuItem Command="cmds:SettingsCommands.ToggleRemoteObjectsAllowed"/>
+                <MenuItem Command="cmds:SettingsCommands.ToggleZoomControlAllowed"/>
             </MenuItem>
             <MenuItem Header="_View">
                 <MenuItem Command="cmds:ViewCommands.ToggleVisibility"/>
